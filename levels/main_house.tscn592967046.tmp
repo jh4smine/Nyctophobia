@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://nkdvg1o42d81"]
 
 [ext_resource type="Script" uid="uid://nbtp0gtardcu" path="res://levels/player.gd" id="1_qm5cn"]
+[ext_resource type="Script" uid="uid://l0l3p3twu7vm" path="res://levels/shadow.gd" id="2_d2pa4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qm5cn"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -82,6 +83,7 @@ fov = 130.8
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.048365712, -0.6441304, -0.049092233)
 shape = SubResource("CapsuleShape3D_qm5cn")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=1574587740]
+[node name="Shadow" type="MeshInstance3D" parent="Player" unique_id=1574587740]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.048365712, -0.6441304, -0.049092233)
 mesh = SubResource("CapsuleMesh_103ce")
+script = ExtResource("2_d2pa4")
