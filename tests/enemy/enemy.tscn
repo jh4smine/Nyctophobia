@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://tests/enemy/enemy.gd" id="1"]
+
+[sub_resource type="CapsuleShape3D" id="EnemyShape"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="EnemyMaterial"]
+albedo_color = Color(0.9, 0.15, 0.08, 1)
+
+[sub_resource type="CapsuleMesh" id="EnemyMesh"]
+material = SubResource("EnemyMaterial")
+radius = 0.4
+height = 1.8
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("EnemyShape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("EnemyMesh")

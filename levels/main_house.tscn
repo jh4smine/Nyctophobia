@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://nkdvg1o42d81"]
 
 [ext_resource type="Script" uid="uid://nbtp0gtardcu" path="res://levels/player.gd" id="1_qm5cn"]
+[ext_resource type="PackedScene" path="res://tests/enemy/enemy.tscn" id="2_enemy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qm5cn"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -13,6 +14,9 @@ sky_material = SubResource("ProceduralSkyMaterial_qm5cn")
 background_mode = 2
 sky = SubResource("Sky_d2pa4")
 glow_enabled = true
+
+[sub_resource type="ConvexPolygonShape3D" id="BasementStairRampShape"]
+points = PackedVector3Array(-0.75, 0, 0, 0.75, 0, 0, -0.75, 0, -2.25, 0.75, 0, -2.25, -0.75, -4.0307345, -7.65, 0.75, -4.0307345, -7.65, -0.75, -4.25, -7.65, 0.75, -4.25, -7.65, -0.75, -4.25, 0, 0.75, -4.25, 0)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qm5cn"]
 
@@ -57,14 +61,36 @@ operation = 2
 size = Vector3(9.6, 3.8, 9.6)
 
 [node name="BasementDoor" type="CSGBox3D" parent="Basement" unique_id=1879003726]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.466, 3.435114, -5.249)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5249338, 1.459874, -5.249)
 operation = 2
-size = Vector3(1.5, 2.5, 1)
+size = Vector3(1.5, 6.45048, 1.3)
 
 [node name="BasementStairs" type="CSGPolygon3D" parent="Basement" unique_id=901505358]
-transform = Transform3D(0.016455788, 0, 0.9998645, 0, 1, 0, -0.9998645, 0, 0.016455788, 3.296, 1.6884489, -4.816)
-polygon = PackedVector2Array(0, 0, 0.5, 0, 0.5, -0.5, 0.9, -0.5, 0.9, -0.9, 1.3, -0.9, 1.3, -1.3, 1.7, -1.3, 1.7, -1.7, 2.1, -1.7, 2.1, -2.1, 2.5, -2.1, 2.5, -2.5, 2.9, -2.5, 2.9, -2.9, 3.3, -2.9, 3.3, -3.3, 3.3, -4.1, 0, -4, 0, 0)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 3.277, 2.26, -3.245)
+polygon = PackedVector2Array(0, 0, 2.25, 0, 2.25, -0.5038418, 2.925, -0.5038418, 2.925, -1.0076836, 3.6, -1.0076836, 3.6, -1.5115254, 4.275, -1.5115254, 4.275, -2.0153673, 4.95, -2.0153673, 4.95, -2.519209, 5.625, -2.519209, 5.625, -3.0230508, 6.3, -3.0230508, 6.3, -3.5268927, 6.975, -3.5268927, 6.975, -4.0307345, 7.65, -4.0307345, 7.65, -4.25, 0, -4.25, 0, 0)
 depth = 1.5
+
+[node name="BasementStairRamp" type="StaticBody3D" parent="." unique_id=858973050]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5192776, -1.7211242, -3.4)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BasementStairRamp" unique_id=1927971693]
+shape = SubResource("BasementStairRampShape")
+
+[node name="BasementPatrolPoints" type="Node3D" parent="." unique_id=560818453]
+
+[node name="Point1" type="Marker3D" parent="BasementPatrolPoints" unique_id=178242113]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -5.7518587, -7.5)
+
+[node name="Point2" type="Marker3D" parent="BasementPatrolPoints" unique_id=1467173339]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -5.7518587, -12.5)
+
+[node name="Point3" type="Marker3D" parent="BasementPatrolPoints" unique_id=1949279164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, -5.7518587, -12.5)
+
+[node name="Enemy" parent="." unique_id=573700078 node_paths=PackedStringArray("player", "patrol_points") instance=ExtResource("2_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -5.7, -8)
+player = NodePath("../Player")
+patrol_points = [NodePath("../BasementPatrolPoints/Point1"), NodePath("../BasementPatrolPoints/Point2"), NodePath("../BasementPatrolPoints/Point3")]
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=981408998]
 script = ExtResource("1_qm5cn")
