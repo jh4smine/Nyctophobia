@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://drte3kvod7v55"]
+
+[node name="Room2" type="Node3D" unique_id=708725961]
+
+[node name="RoomCombiner" type="CSGCombiner3D" parent="." unique_id=1482221164]
+use_collision = true
+
+[node name="Outerwalls" type="CSGBox3D" parent="RoomCombiner" unique_id=431983940]
+use_collision = true
+size = Vector3(18, 5, 15)
+
+[node name="InnerSpace" type="CSGBox3D" parent="RoomCombiner" unique_id=1204105648]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2187128, 0.16681385, 0)
+operation = 2
+size = Vector3(18.037, 4.8, 14.6)
+
+[node name="Door" type="CSGBox3D" parent="RoomCombiner" unique_id=2081421361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7133904, -0.9805144, 6.9245825)
+operation = 2
+size = Vector3(1.5, 2.5, 1.5)
