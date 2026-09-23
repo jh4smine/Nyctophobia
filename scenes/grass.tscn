@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://dqd3outtib4h2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dtglo"]
+size = Vector3(11.430908, 1, 17.80957)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wt34f"]
+albedo_color = Color(0.13333334, 0.16862746, 0.015686275, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_u0ya7"]
+size = Vector2(12, 18)
+orientation = 1
+
+[node name="Grass" type="Node3D" unique_id=887796223]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1868416492]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1028491435]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2489014, -0.22729492, 1.5374756)
+shape = SubResource("BoxShape3D_dtglo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=497875009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1233008, 0, 1.5397243)
+material_override = SubResource("StandardMaterial3D_wt34f")
+mesh = SubResource("QuadMesh_u0ya7")
