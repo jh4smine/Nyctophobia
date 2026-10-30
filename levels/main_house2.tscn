@@ -1,0 +1,234 @@
+[gd_scene format=3 uid="uid://baoqfpcjfvf5c"]
+
+[ext_resource type="PackedScene" uid="uid://drte3kvod7v55" path="res://levels/room_2.tscn" id="1_cv06x"]
+[ext_resource type="PackedScene" uid="uid://dt6xn86ixgpp2" path="res://levels/room_3.tscn" id="2_7icbx"]
+[ext_resource type="PackedScene" uid="uid://dgmh1nofspug2" path="res://levels/room_4.tscn" id="3_yx53v"]
+[ext_resource type="Script" uid="uid://nbtp0gtardcu" path="res://player/player.gd" id="4_73o1l"]
+[ext_resource type="PackedScene" uid="uid://dqd3outtib4h2" path="res://scenes/grass.tscn" id="5_84d2j"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qm5cn"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_d2pa4"]
+sky_material = SubResource("ProceduralSkyMaterial_qm5cn")
+
+[sub_resource type="Environment" id="Environment_mj00m"]
+background_mode = 2
+sky = SubResource("Sky_d2pa4")
+glow_enabled = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qm5cn"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_103ce"]
+
+[node name="MainHouse" type="Node3D" unique_id=1251159034]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=59261958]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2051561678]
+environment = SubResource("Environment_mj00m")
+
+[node name="LivingRoom" type="CSGCombiner3D" parent="." unique_id=318254334]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7727246, 0, 0)
+use_collision = true
+
+[node name="OuterBox" type="CSGBox3D" parent="LivingRoom" unique_id=696877666]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8826103, 0.29407907, 4.003424)
+size = Vector3(20, 5, 18)
+
+[node name="InnerHollow" type="CSGBox3D" parent="LivingRoom" unique_id=967121330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.8625338, 0.58228576, 3.9507194)
+operation = 2
+size = Vector3(19.6, 4.8, 17.6)
+
+[node name="BasementHole" type="CSGBox3D" parent="LivingRoom" unique_id=2030939508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8662944, -0.5444939, -4.685742)
+operation = 2
+size = Vector3(1.5, 2.5, 2.5078125)
+
+[node name="Door" type="CSGBox3D" parent="LivingRoom" unique_id=1531464510]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4714465, -0.5564418, 12.898901)
+operation = 2
+size = Vector3(1.5, 2.5, 0.5751953)
+
+[node name="Door2" type="CSGBox3D" parent="LivingRoom" unique_id=1998366041]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.823072, -0.5564418, -5.0114594)
+operation = 2
+size = Vector3(1.5, 2.5, 0.5751953)
+
+[node name="Walls" type="Node" parent="LivingRoom" unique_id=1702240828]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=361522835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3994336, 0.2961626, 11.855238)
+use_collision = true
+size = Vector3(0.25341797, 5, 1.8049316)
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=698631784]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3994336, 0.2961626, -0.9021917)
+use_collision = true
+size = Vector3(0.25341797, 5, 0.8013916)
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=952068218]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3994336, 2.4455156, 4.100928)
+size = Vector3(0.25341797, 0.70129395, 13.717499)
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=757786531]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3994336, 0.2961626, 8.933352)
+use_collision = true
+size = Vector3(0.25341797, 5, 0.8013916)
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=1687733959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.659014, 0.2961626, 3.857194)
+use_collision = true
+size = Vector3(0.25341797, 5, 5.0312576)
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=105441754]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.216997, 0.2961626, 6.2054486)
+use_collision = true
+size = Vector3(1.3693848, 5, 0.33474827)
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=915521661]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.216997, 0.2961626, 1.4516335)
+use_collision = true
+size = Vector3(1.3693848, 5, 0.33474827)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=1886830827]
+transform = Transform3D(0.9999385, 0, -0.01108965, 0, 1, 0, 0.01108965, 0, 0.9999385, 1.5534158, 0.2961626, -3.8202524)
+use_collision = true
+size = Vector3(0.56140137, 5, 2.102478)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=1478922099]
+transform = Transform3D(0.99984145, 0, -0.01781113, 0, 1, 0, 0.01781113, 0, 0.99984145, 3.5444813, 0.2961626, -3.8232927)
+size = Vector3(0.5015259, 5, 2.102478)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=67706310]
+transform = Transform3D(-0.0045200456, 0, 0.99998975, 0, 1, 0, -0.99998975, 0, -0.0045200456, 2.4846857, 1.7849627, -2.8993125)
+size = Vector3(0.25341797, 2.0224, 2.102478)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="LivingRoom/Walls" unique_id=1145645754]
+transform = Transform3D(-0.0045200456, 0, 0.99998975, 0, 1, 0, -0.99998975, 0, -0.0045200456, 6.2999635, -0.8233187, -4.2521)
+size = Vector3(1.3878021, 2.1343918, 5.100399)
+
+[node name="Window2" type="CSGBox3D" parent="LivingRoom" unique_id=628220706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.403158, 0.8300621, 8.744074)
+operation = 2
+size = Vector3(1.5, 3.3691406, 2.3574524)
+
+[node name="Window3" type="CSGBox3D" parent="LivingRoom" unique_id=498537793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.403158, 0.8300621, -1.2180653)
+operation = 2
+size = Vector3(1.5, 3.3691406, 2.3574524)
+
+[node name="Stairs" type="CSGPolygon3D" parent="LivingRoom" unique_id=166102476]
+transform = Transform3D(-0.018149586, 0, -0.9998353, 0, 1, 0, 0.9998353, 0, -0.018149586, 1.9782038, 0.24049544, -3.8548927)
+polygon = PackedVector2Array(0, 0, 0.5, 0, 0.5, -0.5, 0.9, -0.5, 0.9, -0.9, 1.3, -0.9, 1.3, -1.3, 1.7, -1.3, 1.7, -1.7, 2.1, -1.7, 2.1, -2.1, 2.5, -2.1, 2.5, -2.5, 2.9, -2.5, 2.9, -2.9, 3.3, -2.9, 3.3, -3.3, 3.3, -4.1, 0, -4, 0, 0)
+depth = 2.48
+
+[node name="Stairs2" type="CSGPolygon3D" parent="LivingRoom" unique_id=1985014761]
+transform = Transform3D(-0.006068155, 0, 0.9999816, 0, 1, 0, -0.9999816, 0, -0.006068155, 6.9403853, 2.394446, -1.5351658)
+polygon = PackedVector2Array(0, 0, 0.5, 0, 0.5, -0.5, 0.9, -0.5, 0.9, -0.9, 1.3, -0.9, 1.3, -1.3, 1.7, -1.3, 1.7, -1.7, 2.1, -1.7, 2.1, -2.1, 2.5, -2.1, 2.5, -2.5, 2.9, -2.5, 2.9, -2.9, 3.3, -2.9, 3.3, -3.3, 3.3, -4.1, 0, -4, 0, 0)
+depth = 2.48
+
+[node name="Windows" type="Node" parent="." unique_id=393795177]
+
+[node name="Basement" type="CSGCombiner3D" parent="." unique_id=304267899]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0056562424, -3.9864926, -0.14846611)
+use_collision = true
+
+[node name="OuterBox" type="CSGBox3D" parent="Basement" unique_id=1614400108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2360965, -2.16367, -19.871153)
+size = Vector3(15, 5, 15)
+
+[node name="InnerHollow" type="CSGBox3D" parent="Basement" unique_id=764527175]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2741525, -1.9431376, -19.819225)
+operation = 2
+size = Vector3(14.6, 4.8, 14.6)
+
+[node name="BasementDoor" type="CSGBox3D" parent="Basement" unique_id=1879003726]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6120224, -3.0909371, -12.41625)
+operation = 2
+size = Vector3(1.5, 2.5, 1)
+
+[node name="BasementStairs" type="CSGPolygon3D" parent="Basement" unique_id=901505358]
+transform = Transform3D(0.016455788, 0, 0.9998645, 0, 1, 0, -0.9998645, 0, 0.016455788, 3.296, 1.9501548, -4.6301136)
+polygon = PackedVector2Array(0, 0, 0.5, 0, 0.5, -0.5, 0.9, -0.5, 0.9, -0.9, 1.3, -0.9, 1.3, -1.3, 1.7, -1.3, 1.7, -1.7, 2.1, -1.7, 2.1, -2.1, 2.5, -2.1, 2.5, -2.5, 2.9, -2.5, 2.9, -2.9, 3.3, -2.9, 3.3, -3.3, 3.3, -4.1, 0, -4, 0, 0)
+depth = 1.5
+
+[node name="BasementStairs2" type="CSGPolygon3D" parent="Basement" unique_id=96216264]
+transform = Transform3D(0.016455788, 0, 0.9998645, 0, 1, 0, -0.9998645, 0, 0.016455788, 3.3379855, -1.434794, -7.853203)
+polygon = PackedVector2Array(0, 0, 0.5, 0, 0.5, -0.5, 0.9, -0.5, 0.9, -0.9, 1.3, -0.9, 1.3, -1.3, 1.7, -1.3, 1.7, -1.7, 2.1, -1.7, 2.1, -2.1, 2.5, -2.1, 2.5, -2.5, 2.9, -2.5, 2.9, -2.9, 3.3, -2.9, 3.3, -3.3, 3.3, -4.1, 0, -4, 0, 0)
+depth = 1.5
+
+[node name="BasementHole2" type="CSGBox3D" parent="Basement" unique_id=196399308]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.660583, -3.0922575, -24.039919)
+operation = 2
+size = Vector3(1.5, 2.5, 1.5)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Basement" unique_id=628729795]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5851042, -4.5847297, -11.535509)
+size = Vector3(1.5027313, 0.5, 1.7270508)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Basement" unique_id=102464986]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.781467, -2.9295955, -8.413172)
+size = Vector3(0.20905113, 4.0128784, 7.96756)
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Basement" unique_id=799777130]
+transform = Transform3D(-0.00048500672, 0, 0.9999999, 2.9802322e-08, 1, -1.4551915e-11, -0.9999999, 0, -0.00048500672, 1.8881698, 4.3001127, -5.3296423)
+polygon = PackedVector2Array(-0.6362629, 1.6329563, 7.175119, -5.249003, -0.9512973, -10.142584)
+depth = 0.23
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="Basement" unique_id=422125477]
+transform = Transform3D(-0.00048500672, 0, 0.9999999, 2.9802322e-08, 1, -1.4551915e-11, -0.9999999, 0, -0.00048500672, 3.5410028, 4.3001127, -5.3296423)
+polygon = PackedVector2Array(-0.6362629, 1.6329563, 7.175119, -5.249003, -0.9512973, -10.142584)
+depth = 0.23
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="Basement" unique_id=1219591288]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4190845, -2.9295955, -8.371836)
+size = Vector3(0.22278976, 4.0128784, 7.8848877)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Basement" unique_id=286507604]
+transform = Transform3D(1, 0, 0, 0, 0.66050917, -0.7508181, 0, 0.7508181, 0.66050917, 2.5882058, 2.555132, -8.5655575)
+size = Vector3(1.8971412, 10.115179, 0.24885559)
+
+[node name="Room2" parent="." unique_id=708725961 instance=ExtResource("1_cv06x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.616104, -6.098542, -20.000008)
+
+[node name="Room3" parent="." unique_id=1230877110 instance=ExtResource("2_7icbx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.579111, -6.0793014, -0.5354438)
+
+[node name="Room4" parent="." unique_id=1553517730 instance=ExtResource("3_yx53v")]
+transform = Transform3D(0.0040002465, 0, -0.999992, 0, 1, 0, 0.999992, 0, 0.0040002465, -40.05724, -6.0810847, 7.819579)
+
+[node name="BasementStairs3" type="CSGPolygon3D" parent="Room4" unique_id=285454390]
+transform = Transform3D(0.99972004, 0, -0.023660988, 0, 1, 0, 0.023660988, 0, 0.99972004, -29.878098, 1.6724072, 21.417202)
+polygon = PackedVector2Array(0, 0, 0.5, 0, 0.5, -0.5, 0.9, -0.5, 0.9, -0.9, 1.3, -0.9, 1.3, -1.3, 1.7, -1.3, 1.7, -1.7, 2.1, -1.7, 2.1, -2.1, 2.5, -2.1, 2.5, -2.5, 2.9, -2.5, 2.9, -2.9, 3.3, -2.9, 3.3, -3.3, 3.3, -4.1, 0, -4, 0, 0)
+depth = 6.65
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=981408998]
+script = ExtResource("4_73o1l")
+
+[node name="Head" type="Node3D" parent="Player" unique_id=96642431]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014003962, 0)
+
+[node name="Camera" type="Camera3D" parent="Player/Head" unique_id=299740327]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2294409, 0)
+keep_aspect = 0
+current = true
+fov = 130.8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=771457260]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.048365712, -0.6441304, -0.049092233)
+shape = SubResource("CapsuleShape3D_qm5cn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=1574587740]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.048365712, -0.6441304, -0.049092233)
+mesh = SubResource("CapsuleMesh_103ce")
+
+[node name="Exterior" type="Node" parent="." unique_id=1007376788]
+
+[node name="Grass" parent="Exterior" unique_id=887796223 instance=ExtResource("5_84d2j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.453257, -2.3863645, 2.8010187)
+visible = false
