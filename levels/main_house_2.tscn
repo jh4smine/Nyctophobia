@@ -9,6 +9,11 @@
 [ext_resource type="Texture2D" uid="uid://xcrcu3xg8gf4" path="res://assets/SBS - Base Materials Pack 512x512/Base Materials 512x512/Clay/Mat_Clay_Tan_04-512x512.png" id="7_j8x23"]
 [ext_resource type="Texture2D" uid="uid://drww2uc36jqe7" path="res://assets/SBS - Base Materials Pack 512x512/Base Materials 512x512/Concrete/Mat_Concrete_Gray_04-512x512.png" id="7_ktd0r"]
 [ext_resource type="Texture2D" uid="uid://dqh7ry6emrfnu" path="res://assets/SBS - Base Materials Pack 512x512/Base Materials 512x512/Concrete/Mat_Concrete_Gray_02-512x512.png" id="9_b5rfl"]
+[ext_resource type="Script" uid="uid://nbtp0gtardcu" path="res://player/player.gd" id="10_b5rfl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j8x23"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_toyot"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t24bo"]
 albedo_color = Color(1.1579998, 1.1234562, 1.0746317, 0.957)
@@ -431,62 +436,83 @@ shadow_mesh = SubResource("ArrayMesh_aw1qi")
 
 [node name="MainHouseNew" type="Node3D" unique_id=524075122]
 
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1762430001]
+transform = Transform3D(-0.06453227, 0, -0.9979156, 0, 1, 0, 0.9979156, 0, -0.06453227, 2.7400324, 1.6785947, 0.079796016)
+script = ExtResource("10_b5rfl")
+
+[node name="Head" type="Node3D" parent="Player" unique_id=673167429]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.014003962, 0)
+
+[node name="Camera" type="Camera3D" parent="Player/Head" unique_id=559394587]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.046602488, 0)
+keep_aspect = 0
+current = true
+fov = 130.8
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=741743547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.048365712, -0.6441304, -0.049092233)
+shape = SubResource("CapsuleShape3D_j8x23")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player" unique_id=1117388861]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.048365712, -0.6441304, -0.049092233)
+mesh = SubResource("CapsuleMesh_toyot")
+
 [node name="Walls" parent="." unique_id=269901041 instance=ExtResource("1_c2v7m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="Cornice_002" parent="Walls" index="0" unique_id=1630920861]
+[node name="Cornice_002" parent="Walls" index="0" unique_id=673706053]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.2433405, 2.3453138, 4.9850574)
 visible = false
 
-[node name="Door" parent="Walls" index="1" unique_id=757284333]
+[node name="Door" parent="Walls" index="1" unique_id=1406613507]
 visible = false
 
-[node name="DoorFrame" parent="Walls" index="2" unique_id=1175036398]
+[node name="DoorFrame" parent="Walls" index="2" unique_id=2020838166]
 transform = Transform3D(0.018499997, 0, 0, 0, 0.025, 0, 0, 0, 0.56, -7.5664434, 2.0964358, 6.8278923)
 visible = false
 
-[node name="PlainWall" parent="Walls" index="3" unique_id=1243485085]
+[node name="PlainWall" parent="Walls" index="3" unique_id=226971392]
 transform = Transform3D(0.1, 0, 0, 0, 1.2, 0, 0, 0, 1.5, -0.89056623, 0.20606756, -8.978543)
 visible = false
 
-[node name="PlainWall_001" parent="Walls" index="4" unique_id=315956223]
+[node name="PlainWall_001" parent="Walls" index="4" unique_id=1476145414]
 visible = false
 
-[node name="PlainWall_002" parent="Walls" index="5" unique_id=312275598]
+[node name="PlainWall_002" parent="Walls" index="5" unique_id=1103996927]
 visible = false
 
-[node name="Player" parent="Walls" index="6" unique_id=236428812]
+[node name="Player" parent="Walls" index="6" unique_id=1383871998]
 visible = false
 
-[node name="QuarterRound" parent="Walls" index="7" unique_id=37351297]
+[node name="QuarterRound" parent="Walls" index="7" unique_id=1881400787]
 transform = Transform3D(0.025, 0, 0, 0, 0.08999999, 0, 0, 0, 1.5, -6.7461047, -0.004760042, 5.1128016)
 visible = false
 
-[node name="Stairs" parent="Walls" index="8" unique_id=1147377210]
+[node name="Stairs" parent="Walls" index="8" unique_id=513329062]
 transform = Transform3D(0.0051835105, 0, 0.9999866, 0, 1, 0, -0.9999866, 0, 0.0051835105, 10.571188, -2.1896138, -0.45435852)
 visible = false
 
-[node name="Stairs2_001" parent="Walls" index="9" unique_id=1583968554]
+[node name="Stairs2_001" parent="Walls" index="9" unique_id=1534424713]
 visible = false
 
-[node name="Wall" parent="Walls" index="10" unique_id=1577981999]
+[node name="Wall" parent="Walls" index="10" unique_id=100965520]
 transform = Transform3D(0.1, 0, 0, 0, 1.2, 0, 0, 0, 1.5, -8.33174, 0.19531345, -6.46569)
 visible = false
 
-[node name="Wall2" parent="Walls" index="11" unique_id=1478639569]
+[node name="Wall2" parent="Walls" index="11" unique_id=1070777117]
 transform = Transform3D(0.1, 0, 0, 0, 1.2, 0, 0, 0, 1.5, -9.435369, -1, 1.0781281)
 visible = false
 
-[node name="Wall_001" parent="Walls" index="12" unique_id=778177240]
+[node name="Wall_001" parent="Walls" index="12" unique_id=215144868]
 visible = false
 
-[node name="Wall_002" parent="Walls" index="13" unique_id=883898101]
+[node name="Wall_002" parent="Walls" index="13" unique_id=322984992]
 visible = false
 
-[node name="Wall_003" parent="Walls" index="14" unique_id=1651087666]
+[node name="Wall_003" parent="Walls" index="14" unique_id=1998776123]
 visible = false
 
-[node name="Window_001" parent="Walls" index="15" unique_id=133392231]
+[node name="Window_001" parent="Walls" index="15" unique_id=1731019280]
 visible = false
 
 [node name="LivingRoom" type="Node3D" parent="." unique_id=1719492258]
