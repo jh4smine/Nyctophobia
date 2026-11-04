@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Horror"
 run/main_scene="uid://e453wn2wq3jk"
-config/features=PackedStringArray("4.7", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
