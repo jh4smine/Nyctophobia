@@ -1,0 +1,94 @@
+[gd_scene load_steps=12 format=3 uid="uid://b17u35a2jn76o"]
+
+[ext_resource type="Script" uid="uid://cbnohkcoxyg8m" path="res://scenes/door.gd" id="1_83dcw"]
+[ext_resource type="Texture2D" uid="uid://cqrru78ecjpj1" path="res://assets/SBS - Base Materials Pack 512x512/Base Materials 512x512/Clay/Mat_Clay_Red_10-128x128.png" id="1_xc1x7"]
+[ext_resource type="Texture2D" uid="uid://yxmu7ohlhv7v" path="res://assets/SBS - Base Materials Pack 512x512/Base Materials 512x512/Cloth/Mat_Cloth_Canvas_05-512x512.png" id="2_jqsk8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vm086"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vccbe"]
+albedo_texture = ExtResource("1_xc1x7")
+
+[sub_resource type="BoxMesh" id="BoxMesh_5pxre"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ueiyo"]
+albedo_texture = ExtResource("2_jqsk8")
+
+[sub_resource type="Animation" id="Animation_uvdjg"]
+resource_name = "open"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hinge:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 1.7453293, 0), Vector3(0, 1.5707964, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_83dcw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hinge:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_la1wf"]
+resource_name = "close"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hinge:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 1.5707964, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_la1wf"]
+_data = {
+&"RESET": SubResource("Animation_83dcw"),
+&"close": SubResource("Animation_la1wf"),
+&"open": SubResource("Animation_uvdjg")
+}
+
+[node name="Door" type="Node3D"]
+
+[node name="Hinge" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22694117, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Hinge" node_paths=PackedStringArray("animation_player")]
+transform = Transform3D(0.455, 0, 0, 0, 0.935, 0, 0, 0, 0.065, 0.22694117, 0, 0)
+script = ExtResource("1_83dcw")
+animation_player = NodePath("../../AnimationPlayer")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hinge/StaticBody3D"]
+shape = SubResource("BoxShape3D_vm086")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Hinge/StaticBody3D"]
+material_override = SubResource("StandardMaterial3D_vccbe")
+mesh = SubResource("BoxMesh_5pxre")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Hinge/StaticBody3D"]
+transform = Transform3D(0.085, 7.430935e-09, 0, -7.430935e-09, 0.085, 0, 0, 0, -2.7450004, 0.30380318, 0, 0)
+material_override = SubResource("StandardMaterial3D_ueiyo")
+mesh = SubResource("BoxMesh_5pxre")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_la1wf")
+}

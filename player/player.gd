@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 var speed: float
 
-const WALK_SPEED = 2.6
+const WALK_SPEED = 2.0
 const SPRINT_SPEED = 3.8
 const CONTROLLER_SENSITIVITY = 5.0
 const SENSITIVITY = 0.003
