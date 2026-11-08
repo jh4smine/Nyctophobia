@@ -1,20 +1,51 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://enemy/enemy_movement.gd" id="1_movement"]
+[ext_resource type="Script" path="res://enemy/enemy_perception.gd" id="2_perception"]
+[ext_resource type="Script" path="res://enemy/enemy_chase_brain.gd" id="3_chase"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_enemy"]
 radius = 0.35
 height = 1.8
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_perception"]
+resource_local_to_scene = true
+radius = 12.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_enemy"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_enemy"]
+albedo_color = Color(0.9, 0.12, 0.04, 1)
+emission_enabled = true
+emission = Color(0.45, 0.025, 0.005, 1)
+
 [node name="Enemy" type="CharacterBody3D"]
 script = ExtResource("1_movement")
+
+[node name="ChaseBrain" type="Node" parent="."]
+script = ExtResource("3_chase")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_enemy")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.9, 0)
+material_override = SubResource("StandardMaterial3D_enemy")
+mesh = SubResource("CapsuleMesh_enemy")
+
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 radius = 0.35
 height = 1.8
-path_desired_distance = 0.2
-target_desired_distance = 0.35
+path_desired_distance = 0.5
+target_desired_distance = 0.6
+
+[node name="Perception" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("2_perception")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Perception"]
+shape = SubResource("SphereShape3D_perception")

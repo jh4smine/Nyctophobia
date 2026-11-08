@@ -9,6 +9,8 @@ const TARGET_CHANGE_EPSILON: float = 0.1
 
 var _has_destination: bool = false
 var _destination_reached: bool = false
+var _destination_failed: bool = false
+var _path_update_frames_remaining: int = 0
 
 
 func _physics_process(delta: float) -> void:
@@ -16,7 +18,11 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 
 	if _has_destination:
-		_follow_navigation_path()
+		if _path_update_frames_remaining > 0:
+			navigation_agent.get_next_path_position()
+			_path_update_frames_remaining -= 1
+		else:
+			_follow_navigation_path()
 	else:
 		_stop_horizontal_movement()
 
@@ -30,6 +36,8 @@ func move_to(target_position: Vector3) -> void:
 
 	_has_destination = true
 	_destination_reached = false
+	_destination_failed = false
+	_path_update_frames_remaining = 2
 	navigation_agent.target_position = target_position
 
 
@@ -37,6 +45,8 @@ func move_to(target_position: Vector3) -> void:
 func stop_moving() -> void:
 	_has_destination = false
 	_destination_reached = false
+	_destination_failed = false
+	_path_update_frames_remaining = 0
 	_stop_horizontal_movement()
 
 
@@ -45,10 +55,19 @@ func has_reached_destination() -> bool:
 	return _destination_reached
 
 
+## Returns true when the current destination failed instead of being reached.
+func has_failed_destination() -> bool:
+	return _destination_failed
+
+
 func _follow_navigation_path() -> void:
+	# Ask the agent for its current waypoint before checking completion. This also
+	# lets it refresh a newly assigned path before we decide it has no route.
 	var next_path_position: Vector3 = navigation_agent.get_next_path_position()
+
 	if navigation_agent.is_navigation_finished():
 		_destination_reached = navigation_agent.is_target_reached()
+		_destination_failed = not _destination_reached
 		_has_destination = false
 		_stop_horizontal_movement()
 		if not _destination_reached:
@@ -60,6 +79,7 @@ func _follow_navigation_path() -> void:
 
 	if direction.length_squared() > 0.0001:
 		direction = direction.normalized()
+		look_at(global_position + direction, Vector3.UP)
 		velocity.x = direction.x * move_speed
 		velocity.z = direction.z * move_speed
 	else:
