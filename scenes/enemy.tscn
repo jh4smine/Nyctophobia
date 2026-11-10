@@ -1,18 +1,10 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://blqfdj3ils5g6"]
 
-[ext_resource type="Script" path="res://enemy/enemy_movement.gd" id="1_movement"]
-[ext_resource type="Script" path="res://enemy/enemy_perception.gd" id="2_perception"]
-[ext_resource type="Script" path="res://enemy/enemy_chase_brain.gd" id="3_chase"]
+[ext_resource type="Script" uid="uid://0i73uyp8853t" path="res://enemy/enemy_movement.gd" id="1_movement"]
+[ext_resource type="Script" uid="uid://1bdxf11icut8" path="res://enemy/enemy_perception.gd" id="2_perception"]
+[ext_resource type="Script" uid="uid://chr8h8kwn4vio" path="res://enemy/enemy_chase_brain.gd" id="3_chase"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_enemy"]
-radius = 0.35
-height = 1.8
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_perception"]
-resource_local_to_scene = true
-radius = 12.0
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_enemy"]
 radius = 0.35
 height = 1.8
 
@@ -21,31 +13,46 @@ albedo_color = Color(0.9, 0.12, 0.04, 1)
 emission_enabled = true
 emission = Color(0.45, 0.025, 0.005, 1)
 
-[node name="Enemy" type="CharacterBody3D"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_enemy"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="SphereMesh" id="SphereMesh_4ra3w"]
+radius = 0.37
+height = 0.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_perception"]
+resource_local_to_scene = true
+radius = 12.0
+
+[node name="Enemy" type="CharacterBody3D" unique_id=737975926]
 script = ExtResource("1_movement")
 
-[node name="ChaseBrain" type="Node" parent="."]
+[node name="ChaseBrain" type="Node" parent="." unique_id=322610340]
 script = ExtResource("3_chase")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.9, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1096277246]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_enemy")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.9, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1725712064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 material_override = SubResource("StandardMaterial3D_enemy")
 mesh = SubResource("CapsuleMesh_enemy")
 
-[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
-radius = 0.35
-height = 1.8
+[node name="left_eye" type="MeshInstance3D" parent="MeshInstance3D" unique_id=358712103]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021057367, 0.4701953, -0.18369865)
+mesh = SubResource("SphereMesh_4ra3w")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=529460319]
 path_desired_distance = 0.5
 target_desired_distance = 0.6
+height = 1.8
+radius = 0.35
 
-[node name="Perception" type="Area3D" parent="."]
+[node name="Perception" type="Area3D" parent="." unique_id=745432381]
 collision_layer = 0
-collision_mask = 1
 script = ExtResource("2_perception")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Perception"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Perception" unique_id=863392048]
 shape = SubResource("SphereShape3D_perception")

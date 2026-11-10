@@ -589,20 +589,6 @@ height = 1.4
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1623844148]
 navigation_mesh = SubResource("NavigationMesh_ktb4s")
 
-[node name="PatrolPoints" type="Node3D" parent="."]
-
-[node name="PatrolPoint1" type="Marker3D" parent="PatrolPoints"]
-position = Vector3(7.5, 0.476, -5.5)
-
-[node name="PatrolPoint2" type="Marker3D" parent="PatrolPoints"]
-position = Vector3(4.0, 0.476, -6.0)
-
-[node name="PatrolPoint3" type="Marker3D" parent="PatrolPoints"]
-position = Vector3(1.0, 0.476, -4.0)
-
-[node name="PatrolPoint4" type="Marker3D" parent="PatrolPoints"]
-position = Vector3(6.0, 0.476, -2.0)
-
 [node name="Hallway" type="Node3D" parent="NavigationRegion3D" unique_id=635079043]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6082096, -11.821594, -22.54163)
 
@@ -1393,6 +1379,20 @@ mesh = SubResource("ArrayMesh_4ckdt")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Room4/Ceiling4/StaticBody3D" unique_id=911420944]
 shape = SubResource("ConcavePolygonShape3D_r23t7")
+
+[node name="PatrolPoints" type="Node3D" parent="." unique_id=1341852337]
+
+[node name="PatrolPoint1" type="Marker3D" parent="PatrolPoints" unique_id=806079632]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.476, -5.5)
+
+[node name="PatrolPoint2" type="Marker3D" parent="PatrolPoints" unique_id=988856876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.476, -6)
+
+[node name="PatrolPoint3" type="Marker3D" parent="PatrolPoints" unique_id=335527183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.476, -4)
+
+[node name="PatrolPoint4" type="Marker3D" parent="PatrolPoints" unique_id=363795084]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.476, -2)
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=1762430001 groups=["player"]]
 transform = Transform3D(-0.06453227, 0, -0.9979156, 0, 1, 0, 0.9979156, 0, -0.06453227, 2.7400324, 1.6785947, 0.079796016)
