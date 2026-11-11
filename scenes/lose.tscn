@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://bpnngodun7isa"]
+
+[ext_resource type="FontFile" uid="uid://q6fax8u8iu6e" path="res://assets/ShadowsIntoLight.ttf" id="1_46blr"]
+[ext_resource type="FontFile" uid="uid://dp683skmw8m6i" path="res://assets/SpecialElite.ttf" id="2_xrsfq"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1ec86"]
+font_size = 72
+font_color = Color(0.72156864, 0.78039217, 0.8509804, 1)
+
+[node name="Lose" type="Control" unique_id=131093404]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1831485773]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=787458233]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="PanelContainer/VBoxContainer" unique_id=270430971]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.78431374, 0.7529412, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("1_46blr")
+theme_override_font_sizes/font_size = 26
+text = "RETRY"
+
+[node name="Button2" type="Button" parent="PanelContainer/VBoxContainer" unique_id=318423754]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.78431374, 0.7529412, 0, 1)
+theme_override_constants/h_separation = 4
+theme_override_fonts/font = ExtResource("1_46blr")
+theme_override_font_sizes/font_size = 26
+text = "LOAD GAME"
+
+[node name="Button3" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1745551342]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.78431374, 0.7529412, 0, 1)
+theme_override_constants/h_separation = 4
+theme_override_fonts/font = ExtResource("1_46blr")
+theme_override_font_sizes/font_size = 26
+text = "EXIT TO MENU"
+
+[node name="Label" type="Label" parent="." unique_id=1087525387]
+layout_mode = 0
+offset_left = 156.0
+offset_top = 122.0
+offset_right = 993.0
+offset_bottom = 257.0
+theme_override_fonts/font = ExtResource("2_xrsfq")
+theme_override_font_sizes/font_size = 146
+text = "Succumbed to Darkness"
+label_settings = SubResource("LabelSettings_1ec86")
+horizontal_alignment = 1
+
+[node name="GM" type="Label" parent="." unique_id=1429735918]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -49.0
+offset_top = -40.0
+offset_right = 259.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9607843, 0.6509804, 0.13725491, 1)
+theme_override_fonts/font = ExtResource("2_xrsfq")
+theme_override_font_sizes/font_size = 16
+text = "Nyctophobia"

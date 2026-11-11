@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dgmh1nofspug2"]
+
+[node name="Room4" type="Node3D" unique_id=708725961]
+
+[node name="RoomCombiner" type="CSGCombiner3D" parent="." unique_id=1482221164]
+use_collision = true
+
+[node name="Outerwalls" type="CSGBox3D" parent="RoomCombiner" unique_id=431983940]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.1405926)
+use_collision = true
+size = Vector3(7, 5, 35.2865)
+
+[node name="InnerSpace" type="CSGBox3D" parent="RoomCombiner" unique_id=1204105648]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006866455, 0.124115944, 3.9656072)
+operation = 2
+size = Vector3(6.53, 4.8, 35.167408)
+
+[node name="Door" type="CSGBox3D" parent="RoomCombiner" unique_id=2081421361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9468923, -1.0291662, 18.239182)
+operation = 2
+size = Vector3(1.5, 2.5, 1.5)
+
+[node name="RoomCombiner2" type="CSGCombiner3D" parent="." unique_id=1072671607]
+transform = Transform3D(-0.0043982184, 0, -0.9999903, 0, 1, 0, 0.9999903, 0, -0.0043982184, -17.000963, 0.012789249, 18.178873)
+use_collision = true
+
+[node name="Outerwalls" type="CSGBox3D" parent="RoomCombiner2" unique_id=2098566898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.31505203)
+use_collision = true
+size = Vector3(7, 5, 26.375214)
+
+[node name="InnerSpace" type="CSGBox3D" parent="RoomCombiner2" unique_id=261392104]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0006904602, 0.124115944, -0.20663452)
+operation = 2
+size = Vector3(6.53, 4.8, 26.822927)

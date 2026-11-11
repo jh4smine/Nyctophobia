@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://c8twkw1455xhd"]
+
+[ext_resource type="Texture2D" uid="uid://2lidvfv86hte" path="res://assets/Gemini_Generated_Image_jqo1o9jqo1o9jqo1.jpg" id="1_yr426"]
+
+[node name="StartLoadingScreen" type="Node2D" unique_id=1533175532]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=857501887]
+position = Vector2(578.75, 326)
+scale = Vector2(0.8457875, 0.8385417)
+texture = ExtResource("1_yr426")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1205901727]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 295.0
+offset_top = 551.0
+offset_right = 841.0
+offset_bottom = 578.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9490196, 0.9490196, 0.9490196, 1)

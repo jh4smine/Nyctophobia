@@ -1,0 +1,124 @@
+[gd_scene format=3 uid="uid://cbedus0asfmnp"]
+
+[ext_resource type="Script" uid="uid://cijmiwqxjpv25" path="res://script/setting.gd" id="1_7k1fe"]
+[ext_resource type="FontFile" uid="uid://q6fax8u8iu6e" path="res://assets/ShadowsIntoLight.ttf" id="1_u58eq"]
+[ext_resource type="FontFile" uid="uid://dp683skmw8m6i" path="res://assets/SpecialElite.ttf" id="2_7k1fe"]
+
+[node name="ControlSetting" type="Control" unique_id=2056783263]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7k1fe")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1776204456]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -289.0
+offset_top = -80.0
+offset_right = 290.5
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 26
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer" unique_id=868536455]
+layout_mode = 2
+
+[node name="HSlider2" type="HSlider" parent="VBoxContainer" unique_id=207714010]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="HSlider3" type="HSlider" parent="VBoxContainer" unique_id=1851637735]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Button" type="Button" parent="." unique_id=894945314]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 506.0
+offset_top = -300.0
+offset_right = -480.0
+offset_bottom = -261.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(0.72156864, 0.78039217, 0.8509804, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_u58eq")
+theme_override_font_sizes/font_size = 21
+text = "Back"
+
+[node name="ControlPanel" type="Label" parent="." unique_id=1000442624]
+layout_mode = 0
+offset_left = 348.0
+offset_top = 89.0
+offset_right = 798.0
+offset_bottom = 164.0
+theme_override_colors/font_color = Color(0.72156864, 0.78039217, 0.8509804, 1)
+theme_override_fonts/font = ExtResource("2_7k1fe")
+theme_override_font_sizes/font_size = 72
+text = "Audio Panel"
+
+[node name="Music" type="Label" parent="." unique_id=1594749386]
+layout_mode = 0
+offset_left = 290.0
+offset_top = 209.0
+offset_right = 598.0
+offset_bottom = 323.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_u58eq")
+theme_override_font_sizes/font_size = 12
+text = "Music"
+
+[node name="Ambience" type="Label" parent="." unique_id=1942532962]
+layout_mode = 0
+offset_left = 289.0
+offset_top = 250.0
+offset_right = 597.0
+offset_bottom = 364.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_u58eq")
+theme_override_font_sizes/font_size = 12
+text = "Ambience"
+
+[node name="Sound Effect" type="Label" parent="." unique_id=557852262]
+layout_mode = 0
+offset_left = 289.0
+offset_top = 292.0
+offset_right = 597.0
+offset_bottom = 406.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_u58eq")
+theme_override_font_sizes/font_size = 12
+text = "Sound Effect"
+
+[node name="GM" type="Label" parent="." unique_id=1337707483]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -49.0
+offset_top = -40.0
+offset_right = 259.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.9607843, 0.6509804, 0.13725491, 1)
+theme_override_fonts/font = ExtResource("2_7k1fe")
+theme_override_font_sizes/font_size = 16
+text = "Nyctophobia"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

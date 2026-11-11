@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://33ghssblty2t"]
+
+[ext_resource type="Script" uid="uid://2sjkx0af561x" path="res://script/main_menu.gd" id="1_bqqt6"]
+[ext_resource type="FontFile" uid="uid://q6fax8u8iu6e" path="res://assets/ShadowsIntoLight.ttf" id="1_ekxnf"]
+[ext_resource type="FontFile" uid="uid://dp683skmw8m6i" path="res://assets/SpecialElite.ttf" id="2_bqqt6"]
+[ext_resource type="Texture2D" uid="uid://xwgu71mhppop" path="res://assets/ff7e6af2-b7cc-42de-8638-26da5a5c4ce0.webp" id="2_wu84c"]
+
+[node name="MainMenu" type="Control" unique_id=2042542044]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bqqt6")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1483525406]
+position = Vector2(576.5, 323.5)
+scale = Vector2(1.1240234, 1.0401928)
+texture = ExtResource("2_wu84c")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=397127281]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="New Game" type="Button" parent="." unique_id=992632899]
+layout_mode = 0
+offset_left = 57.0
+offset_top = 140.0
+offset_right = 204.0
+offset_bottom = 190.0
+size_flags_horizontal = 0
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.72156864, 0.78039217, 0.8509804, 1)
+theme_override_colors/font_hover_color = Color(0.9607843, 0.6509804, 0.13725491, 1)
+theme_override_constants/line_spacing = 100
+theme_override_fonts/font = ExtResource("1_ekxnf")
+theme_override_font_sizes/font_size = 16
+text = "NEW GAME"
+
+[node name="Load Game" type="Button" parent="." unique_id=446434326]
+layout_mode = 0
+offset_left = 57.0
+offset_top = 199.0
+offset_right = 214.0
+offset_bottom = 249.0
+size_flags_horizontal = 0
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.72156864, 0.78039217, 0.8509804, 1)
+theme_override_colors/font_hover_color = Color(0.9607843, 0.6509804, 0.13725491, 1)
+theme_override_constants/line_spacing = 100
+theme_override_fonts/font = ExtResource("1_ekxnf")
+theme_override_font_sizes/font_size = 16
+text = "LOAD GAME"
+
+[node name="Settings" type="Button" parent="." unique_id=635051455]
+layout_mode = 0
+offset_left = 59.0
+offset_top = 256.0
+offset_right = 197.0
+offset_bottom = 306.0
+size_flags_horizontal = 0
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.72156864, 0.78039217, 0.8509804, 1)
+theme_override_colors/font_hover_color = Color(0.9607843, 0.6509804, 0.13725491, 1)
+theme_override_constants/line_spacing = 100
+theme_override_fonts/font = ExtResource("1_ekxnf")
+theme_override_font_sizes/font_size = 16
+text = "SETTINGS"
+
+[node name="Quit game" type="Button" parent="." unique_id=772907082]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 317.0
+offset_right = 203.0
+offset_bottom = 367.0
+size_flags_horizontal = 0
+size_flags_vertical = 6
+theme_override_colors/font_color = Color(0.72156864, 0.78039217, 0.8509804, 1)
+theme_override_colors/font_hover_color = Color(0.9607843, 0.6509804, 0.13725491, 1)
+theme_override_constants/line_spacing = 100
+theme_override_fonts/font = ExtResource("1_ekxnf")
+theme_override_font_sizes/font_size = 16
+text = "QUIT GAME"
+
+[node name="Label" type="Label" parent="." unique_id=1242812355]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 70.0
+offset_right = 965.0
+offset_bottom = 139.0
+theme_override_colors/font_color = Color(0.9607843, 0.6509804, 0.13725491, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.30361181, 4.3317675e-07, 0)
+theme_override_constants/shadow_offset_x = 1
+theme_override_fonts/font = ExtResource("2_bqqt6")
+theme_override_font_sizes/font_size = 68
+text = "NYCTOPHOBIA"
+
+[node name="Music2" type="Label" parent="." unique_id=624087998]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 599.0
+offset_right = 1134.0
+offset_bottom = 713.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_ekxnf")
+theme_override_font_sizes/font_size = 14
+text = "To escape the darkness of his past, you must return to where it all began. Some monsters aren't hunting you out of malice—they're just waiting for you to stop running and finally look them in the eye"
+
+[connection signal="pressed" from="Load Game" to="." method="_on_load_game_pressed"]
+[connection signal="pressed" from="Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Quit game" to="." method="_on_quit_game_pressed"]
