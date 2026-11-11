@@ -3,14 +3,10 @@ extends RayCast3D
 func _ready() -> void:
 	enabled = true
 	exclude_parent = true
-	add_exception(get_parent())
+	var player_body := get_parent().get_parent() as CollisionObject3D
+	if player_body != null:
+		add_exception(player_body)
 
 
 func _physics_process(_delta: float) -> void:
 	force_raycast_update()
-
-	if is_colliding():
-		print("HIT: ", get_collider().name)
-		print("NORMAL: ", get_collision_normal())
-	else:
-		print("NO HIT")
