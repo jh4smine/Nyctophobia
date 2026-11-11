@@ -44,7 +44,7 @@ func _physics_process(_delta: float) -> void:
 		var was_visible: bool = _visible_targets.has(target)
 		if can_see_target:
 			# Cache positions only while vision confirms the player is visible.
-			_candidate_last_visible_positions[index] = target.global_position
+			_candidate_last_visible_positions[index] = get_target_aim_point(target)
 			if not was_visible:
 				_visible_targets.append(target)
 				target_detected.emit(target)
@@ -57,7 +57,7 @@ func _physics_process(_delta: float) -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group(target_group) and not _candidate_targets.has(body):
 		_candidate_targets.append(body)
-		_candidate_last_visible_positions.append(body.global_position)
+		_candidate_last_visible_positions.append(get_target_aim_point(body))
 
 
 ## Returns the most recent position vision confirmed for this target.
@@ -69,6 +69,17 @@ func get_last_visible_position(target: Node3D) -> Vector3:
 	return _candidate_last_visible_positions[index]
 
 
+## Returns the point vision aims at: the center of the target's collision shape.
+## Player rigs differ (origin at the feet vs. at the head), so aiming at the body
+## itself is more reliable than origin + target_point_height, which is only the fallback.
+func get_target_aim_point(target: Node3D) -> Vector3:
+	for child: Node in target.get_children():
+		var shape := child as CollisionShape3D
+		if shape != null and not shape.disabled:
+			return shape.global_position
+	return target.global_position + Vector3.UP * target_point_height
+
+
 func is_target_visible(target: Node3D) -> bool:
 	return _visible_targets.has(target)
 
@@ -76,7 +87,7 @@ func is_target_visible(target: Node3D) -> bool:
 func _is_target_visible(target: Node3D) -> bool:
 	_last_visibility_failure_reason = ""
 	var eye_position: Vector3 = global_position + Vector3.UP * eye_height
-	var target_position: Vector3 = target.global_position + Vector3.UP * target_point_height
+	var target_position: Vector3 = get_target_aim_point(target)
 	var offset: Vector3 = target_position - eye_position
 	var distance_squared: float = offset.length_squared()
 	if distance_squared <= 0.0001 or distance_squared > sight_range * sight_range:

@@ -106,7 +106,7 @@ func _tick_chase() -> void:
 	if not bool(_perception.call(&"is_target_visible", _current_target)):
 		return
 
-	var target_position: Vector3 = _current_target.global_position
+	var target_position: Vector3 = _to_navigation_point(_perception.call(&"get_target_aim_point", _current_target))
 	_last_known_position = target_position
 	_has_last_known_position = true
 	if not _has_chase_destination or _horizontal_distance(target_position, _last_chase_destination) >= chase_repath_distance:
@@ -191,6 +191,15 @@ func _wait_until_navigation_is_ready() -> void:
 		push_warning("Patrol is enabled, but no Marker3D points were found under PatrolPoints.")
 
 
+## Snaps a world position onto the navigation mesh so chase/investigate targets
+## are reachable even when the target's origin is not at floor level.
+func _to_navigation_point(world_position: Vector3) -> Vector3:
+	var navigation_map: RID = _enemy.get_world_3d().navigation_map
+	if not navigation_map.is_valid() or NavigationServer3D.map_get_iteration_id(navigation_map) == 0:
+		return world_position
+	return NavigationServer3D.map_get_closest_point(navigation_map, world_position)
+
+
 func _horizontal_distance(first: Vector3, second: Vector3) -> float:
 	return Vector2(first.x, first.z).distance_to(Vector2(second.x, second.z))
 
@@ -242,7 +251,7 @@ func _on_target_detected(target: Node3D) -> void:
 	_has_chase_destination = false
 	_patrol_destination_active = false
 	_patrol_wait_timer = 0.0
-	_last_known_position = _perception.call(&"get_last_visible_position", target)
+	_last_known_position = _to_navigation_point(_perception.call(&"get_last_visible_position", target))
 	_has_last_known_position = true
 	print("Enemy saw %s and is starting a chase." % target.name)
 
@@ -252,7 +261,7 @@ func _on_target_lost(target: Node3D) -> void:
 		return
 
 	# Perception freezes this cached position at the last frame with clear vision.
-	_last_known_position = _perception.call(&"get_last_visible_position", target)
+	_last_known_position = _to_navigation_point(_perception.call(&"get_last_visible_position", target))
 	_has_last_known_position = true
 	_current_target = null
 	print("Enemy lost sight of %s." % target.name)
