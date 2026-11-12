@@ -1,3 +1,4 @@
+
 extends CharacterBody3D
 
 var speed: float = 0.0
@@ -11,10 +12,22 @@ const BOB_FREQ: float = 6.0
 const BOB_AMP: float = 0.08
 const SPRINT_PANT_THRESHOLD: float = 3.0
 
+# Sprint panting settings
+const PANT_SPEED_REDUCTION: float = 0.8
+const STAMINA_RECOVERY_TIME: float = 3.0
+
+# Peek settings
+const PEEK_ANGLE: float = 20.0
+const PEEK_OFFSET: float = 0.45
+const PEEK_SMOOTHING: float = 16.0
+
 var mouse_pitch: float = 0.0
 var is_looking_behind: bool = false
 var target_look_angle: float = 0.0
 var current_look_angle: float = 0.0
+var current_peek_angle: float = 0.0
+var target_peek_angle: float = 0.0
+var current_peek_offset: float = 0.0
 var t_bob: float = 0.0
 var camera_start_position: Vector3
 var prev_bob_y: float = 0.0
@@ -36,7 +49,7 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion and not is_looking_behind:
+	if event is InputEventMouseMotion and not is_looking_behind and Input.get_axis("peek_left", "peek_right") == 0.0:
 		rotate_y(-event.relative.x * SENSITIVITY)
 		mouse_pitch = clampf(mouse_pitch - event.relative.y * SENSITIVITY, deg_to_rad(-85.0), deg_to_rad(85.0))
 		head.rotation.x = mouse_pitch
@@ -51,20 +64,42 @@ func _physics_process(delta: float) -> void:
 
 	var input_dir: Vector2 = Input.get_vector("left", "right", "down", "up")
 	var is_moving: bool = input_dir.length_squared() > 0.0
+	var is_peeking: bool = Input.is_action_pressed("peek_left") or Input.is_action_pressed("peek_right")
 	var is_sprinting: bool = Input.is_action_pressed("sprint") and is_moving and is_on_floor()
-	speed = SPRINT_SPEED if is_sprinting else WALK_SPEED
 
+	# Sprint panting and stamina recovery
 	if is_sprinting:
 		sprint_timer += delta
-		if sprint_timer >= SPRINT_PANT_THRESHOLD and breathing_sound != null and not breathing_sound.playing:
-			breathing_sound.play()
+
+		if sprint_timer >= SPRINT_PANT_THRESHOLD:
+			# Start panting after 3 seconds
+			if breathing_sound != null and not breathing_sound.playing:
+				breathing_sound.play()
+
+			# Slightly reduce sprint speed
+			speed = SPRINT_SPEED - PANT_SPEED_REDUCTION
+		else:
+			speed = SPRINT_SPEED
+
 	else:
-		sprint_timer = 0.0
+		# Recover stamina while walking OR standing still
+		sprint_timer = move_toward(
+			sprint_timer,
+			0.0,
+			(SPRINT_PANT_THRESHOLD / STAMINA_RECOVERY_TIME) * delta
+		)
+
+		speed = WALK_SPEED
+
+		# Stop panting when not sprinting
+		if breathing_sound != null and breathing_sound.playing:
+			breathing_sound.stop()
+
 		if breathing_sound != null and breathing_sound.playing:
 			breathing_sound.stop()
 
 	var is_stair_step_edge: bool = input_dir.y > 0.1 and stair_ray.is_colliding() and not stair_max.is_colliding()
-	if is_stair_step_edge:
+	if is_stair_step_edge and not is_peeking:
 		# Keep a small upward assist active while the lower ray sees a riser that
 		# the upper ray clears. This lets the body climb consecutive steps instead
 		# of getting only one lift at the first riser.
@@ -74,42 +109,82 @@ func _physics_process(delta: float) -> void:
 	direction += global_transform.basis.x * input_dir.x
 	direction.y = 0.0
 	direction = direction.normalized()
-	if direction != Vector3.ZERO:
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
+
+	# Stop player movement while peeking
+	if is_peeking:
+		velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED * delta * 10.0)
+		velocity.z = move_toward(velocity.z, 0.0, WALK_SPEED * delta * 10.0)
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED * delta * 5.0)
-		velocity.z = move_toward(velocity.z, 0.0, WALK_SPEED * delta * 5.0)
+		if direction != Vector3.ZERO:
+			velocity.x = direction.x * speed
+			velocity.z = direction.z * speed
+		else:
+			velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED * delta * 5.0)
+			velocity.z = move_toward(velocity.z, 0.0, WALK_SPEED * delta * 5.0)
 
 	var look_x: float = Input.get_axis("look_left", "look_right")
 	var look_y: float = Input.get_axis("look_up", "look_down")
-	rotate_y(-look_x * CONTROLLER_SENSITIVITY * delta)
-	mouse_pitch = clampf(mouse_pitch - look_y * CONTROLLER_SENSITIVITY * delta, deg_to_rad(-85.0), deg_to_rad(85.0))
-	head.rotation.x = mouse_pitch
+	if not is_peeking:
+		rotate_y(-look_x * CONTROLLER_SENSITIVITY * delta)
+		mouse_pitch = clampf(mouse_pitch - look_y * CONTROLLER_SENSITIVITY * delta, deg_to_rad(-85.0), deg_to_rad(85.0))
+		head.rotation.x = mouse_pitch
 
 	is_looking_behind = Input.is_action_pressed("look_behind")
-	target_look_angle = PI if is_looking_behind else 0.0
+	target_look_angle = -PI if is_looking_behind else 0.0
 	var look_blend: float = 1.0 - exp(-LOOK_BEHIND_SMOOTHING * delta)
 	current_look_angle = lerp_angle(current_look_angle, target_look_angle, look_blend)
 	head.rotation.y = current_look_angle
+
+	# Peek left and right
+	# Q = Peek left
+	# E = Peek right
+	# Peek only works when standing still and not looking behind
+	# Player movement and mouse movement are locked while peeking
+
+	var peek_input: float = 0.0
+
+	if not is_moving and not is_sprinting and not is_looking_behind:
+		peek_input = Input.get_axis("peek_left", "peek_right")
+
+	target_peek_angle = deg_to_rad(PEEK_ANGLE) * peek_input
+
+	var peek_blend: float = 1.0 - exp(-PEEK_SMOOTHING * delta)
+
+	current_peek_angle = lerp(
+		current_peek_angle,
+		target_peek_angle,
+		peek_blend
+	)
+
+	current_peek_offset = lerp(
+		current_peek_offset,
+		PEEK_OFFSET * peek_input,
+		peek_blend
+	)
 
 	if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 	var horizontal_speed: float = Vector2(velocity.x, velocity.z).length()
+
 	if horizontal_speed > 0.1:
 		t_bob += delta * horizontal_speed
 		var on_stairs: bool = is_stair_step_edge or stair_ray.is_colliding() or stair_max.is_colliding()
 		var camera_target: Vector3 = camera_start_position + _headbob(t_bob, on_stairs)
+		camera_target.x += current_peek_offset
 		var camera_follow_speed: float = 25.0 if on_stairs else 12.0
 		camera.position = camera.position.lerp(camera_target, minf(delta * camera_follow_speed, 1.0))
 		if is_on_floor():
 			_handle_footsteps(is_sprinting)
 	else:
 		t_bob = 0.0
-		camera.position = camera.position.move_toward(camera_start_position, delta * 2.0)
+		var idle_camera_target: Vector3 = camera_start_position
+		idle_camera_target.x += current_peek_offset
+		camera.position = camera.position.lerp(idle_camera_target, minf(delta * 12.0, 1.0))
 		step_triggered = false
 		prev_bob_y = 0.0
+
+	camera.rotation.z = lerp_angle(camera.rotation.z, -current_peek_angle, peek_blend)
 
 	move_and_slide()
 

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://daf1106b3yhwi"]
 
-[ext_resource type="Script" path="res://player/player.gd" id="1_oul6g"]
+[ext_resource type="Script" uid="uid://dxhsqh1f2gkek" path="res://player/player.gd" id="1_oul6g"]
 [ext_resource type="Script" uid="uid://dmthtlm3ucrwj" path="res://scenes/raycast.gd" id="2_rkbax"]
 [ext_resource type="Script" uid="uid://cy5tlgwlxu7oh" path="res://player/stair_ray.gd" id="3_g1dw6"]
 [ext_resource type="AudioStream" uid="uid://bl7fxvmrlrx7y" path="res://sounds/Panting.mp3" id="4_yw30f"]
@@ -28,7 +28,7 @@ shape = SubResource("ConvexPolygonShape3D_b5rfl")
 transform = Transform3D(1, 8.9245604e-11, -4.4703484e-08, -6.544144e-11, 0.99999994, -1.1393824e-10, 5.5879354e-08, -4.6659465e-10, 1, -2.896785e-05, -0.5007495, -0.0008528232)
 
 [node name="Camera" type="Camera3D" parent="Head" unique_id=1540662895]
-transform = Transform3D(1, -1.1111566e-10, -1.3038515e-07, 8.7311484e-11, 1.0000001, -1.179589e-10, 1.19209275e-07, 6.984918e-10, 1, 9.045834e-09, 0, -0.2726644)
+transform = Transform3D(1.2499999, -1.3889455e-10, -1.6298141e-07, 1.0913936e-10, 1.25, -1.474485e-10, 1.4901158e-07, 8.731145e-10, 1.2499999, -0.036398202, 0, -0.37080878)
 keep_aspect = 0
 current = true
 fov = 130.8

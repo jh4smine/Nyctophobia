@@ -1687,7 +1687,7 @@ skeleton = NodePath("../../LivingRoom")
 shape = SubResource("ConcavePolygonShape3D_3glmq")
 
 [node name="Player" parent="." unique_id=1084617918 groups=["player"] instance=ExtResource("1_b5rfl")]
-transform = Transform3D(-0.13052621, -0.0017303971, 0.99144334, 0, 0.99999845, 0.0017453285, -0.9914449, 0.00022781114, -0.130526, 17.76581, -1.8892778, -0.84066904)
+transform = Transform3D(0.022687351, 0.001744879, -0.999741, 0, 0.9999984, 0.0017453282, 0.9997426, -3.9596875e-05, 0.022687314, 3.4307642, 1.7394133, -0.24464554)
 
 [node name="PatrolPoints" type="Node3D" parent="." unique_id=1341852337]
 
