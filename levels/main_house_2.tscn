@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cgj4l4s4xkuwp" path="res://assets/SBS - Base Materials Pack 512x512/Base Materials 512x512/Wood/Mat_Wood_White_01-512x512.png" id="4_b5rfl"]
 [ext_resource type="Texture2D" uid="uid://dw86o0jmw5mgv" path="res://assets/SBS - Horror Texture Pack 512x512/512x512/Wall/Horror_Wall_04-512x512.png" id="4_ktd0r"]
 [ext_resource type="Texture2D" uid="uid://vs3e2suom152" path="res://assets/floorWood_albedo.png" id="4_toyot"]
+[ext_resource type="AudioStream" uid="uid://cnjylhuf6a7hg" path="res://sounds/finals rain.mp3" id="5_aw1qi"]
 [ext_resource type="Texture2D" uid="uid://60l06wm0dpvb" path="res://assets/SBS - Horror Texture Pack 512x512/512x512/Floor/Horror_Floor_12-512x512.png" id="6_b5rfl"]
 [ext_resource type="Texture2D" uid="uid://dkj2bs1tf3mky" path="res://assets/SBS - Horror Texture Pack 512x512/512x512/Metal/Horror_Metal_02-512x512.png" id="6_j8x23"]
 [ext_resource type="Texture2D" uid="uid://xcrcu3xg8gf4" path="res://assets/SBS - Base Materials Pack 512x512/Base Materials 512x512/Clay/Mat_Clay_Tan_04-512x512.png" id="7_j8x23"]
@@ -13,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://blqfdj3ils5g6" path="res://scenes/enemy.tscn" id="11_enemy"]
 [ext_resource type="PackedScene" uid="uid://b17u35a2jn76o" path="res://scenes/door.tscn" id="11_j8x23"]
 [ext_resource type="PackedScene" uid="uid://dl3u81u83j08b" path="res://assets/props/ceilingLight.glb" id="13_nqbi4"]
+[ext_resource type="Script" uid="uid://bgwdqpphnfgnu" path="res://levels/area_3d.gd" id="15_hhhwx"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_ktb4s"]
 vertices = PackedVector3Array(3.990014, -0.52408314, -30.869198, 7.740014, -0.52408314, -30.619198, 7.990014, -0.52408314, -32.369198, 9.990014, -0.52408314, -32.369198, 9.990014, -0.52408314, -36.369198, 3.990014, -0.52408314, -36.369198, 23.740013, -0.52408314, -32.119198, 23.740013, -0.52408314, -36.369198, 7.240014, -3.0240831, -32.619198, 8.990014, -3.0240831, -32.869198, 8.990014, -3.0240831, -35.869198, 4.490014, -3.0240831, -36.119198, 4.490014, -3.0240831, -20.369198, 7.240014, -3.0240831, -20.369198, 27.490013, -1.2740831, -36.119198, 26.990013, -1.5240831, -36.119198, 26.990013, -1.5240831, -34.369198, 27.490013, -1.2740831, -32.369198, 25.990013, -2.5240831, -34.369198, 25.990013, -2.5240831, -35.869198, 24.573349, -3.0240831, -35.869198, 24.573349, -3.0240831, -34.494198, 24.64386, -3.0240831, -32.44612, 26.066936, -2.5240831, -32.40766, 3.990014, -0.52408314, -20.869198, 7.740014, -0.52408314, -21.119198, 7.990014, -0.52408314, -19.369198, 3.990014, -0.52408314, -8.869198, 11.990014, -0.52408314, -8.869198, 11.990014, -0.52408314, -19.369198, 14.990014, -0.52408314, -8.619198, 15.240014, -0.52408314, -6.869198, 23.490013, -0.52408314, -7.119198, 23.490013, -0.52408314, -19.369198, 13.240014, -3.0240831, -17.869198, 12.990014, -3.0240831, -18.869198, 4.490014, -3.0240831, -18.869198, 4.490014, -3.0240831, -9.369198, 12.990014, -3.0240831, -9.119198, 22.990013, -3.0240831, -18.869198, 14.490014, -3.0240831, -18.869198, 14.240014, -3.0240831, -18.119198, 14.490014, -3.0240831, -9.369198, 22.990013, -3.0240831, -9.369198, 22.990013, -3.0240831, -7.869198, 22.490013, -3.0240831, -8.119198, 15.740014, -3.0240831, -7.869198, 15.490014, -3.0240831, -0.61919785, 15.740014, -3.0240831, 2.3808022, 22.990013, -3.0240831, 2.3808022, 13.740014, -3.0240831, -7.869198, 13.740014, -3.0240831, -1.6191978, 14.240014, -3.0240831, -1.6191978, 14.240014, -3.0240831, -7.869198, 8.490014, 2.7259169, 0.13080215, 10.490014, 2.7259169, -0.119197845, 10.490014, 2.7259169, -0.61919785, 8.490014, 2.7259169, -0.86919785, 0.49001408, 2.9759169, -7.369198, 0.49001408, 2.9759169, 3.6308022, 8.490014, 2.7259169, -7.369198, 8.490014, 2.7259169, 3.6308022, 15.240014, -0.52408314, 2.8808022, 23.490013, -0.52408314, 2.8808022, 6.490014, 0.47591686, 0.13080215, 6.990014, 0.47591686, -0.36919785, 6.740014, 0.47591686, -1.8691978, 4.990014, 0.47591686, 1.6308022, 6.490014, 0.47591686, 1.6308022, 0.7400141, 0.47591686, 3.1308022, 4.740014, 0.47591686, 3.1308022, 0.49001408, 0.47591686, 0.38080215, 7.990014, 0.47591686, -6.869198, 0.7400141, 0.47591686, -6.869198, 7.990014, 0.47591686, -2.1191978, 13.740014, -3.0240831, 0.88080215, 13.740014, -3.0240831, 2.8808022, 14.240014, -3.0240831, 2.8808022, 14.240014, -3.0240831, 0.88080215)
@@ -594,6 +596,9 @@ uv1_scale = Vector3(4, 4, 4)
 [sub_resource type="Environment" id="Environment_dtglo"]
 ambient_light_energy = 0.08
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ok3pq"]
+size = Vector3(8.633057, 1, 1.0244141)
+
 [node name="MainHouseNew" type="Node3D" unique_id=1979598751]
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1623844148]
@@ -1043,6 +1048,10 @@ omni_range = 2.9170284
 [node name="OmniLight3D3" type="OmniLight3D" parent="NavigationRegion3D/LivingRoom/Light" unique_id=110263210]
 transform = Transform3D(0.9999971, -9.745539e-06, 0.0024261218, 1.00836205e-05, 1, -0.00013933847, -0.0024261205, 0.00013936253, 0.9999971, 6.8639402, 2.365733, -6.24254)
 omni_range = 8.240479
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="NavigationRegion3D/LivingRoom" unique_id=1965907105]
+stream = ExtResource("5_aw1qi")
+autoplay = true
 
 [node name="Room2" type="Node3D" parent="NavigationRegion3D" unique_id=2122916237]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.868721, -4.8327107, -0.8684006)
@@ -1708,3 +1717,11 @@ transform = Transform3D(-0.434, 0, 0.901, 0, 1, 0, -0.901, 0, -0.434, 6.74, 0.47
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1684853239]
 environment = SubResource("Environment_dtglo")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1508768600 node_paths=PackedStringArray("ambience_player")]
+script = ExtResource("15_hhhwx")
+ambience_player = NodePath("../NavigationRegion3D/LivingRoom/AudioStreamPlayer3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=127720877]
+transform = Transform3D(1, 0, 0, 0, 0.99978286, -0.020839226, 0, 0.020839226, 0.99978286, 13.040446, 0.0002543851, -0.5706744)
+shape = SubResource("BoxShape3D_ok3pq")
