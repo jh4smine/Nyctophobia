@@ -11,6 +11,10 @@ const LOOK_BEHIND_SMOOTHING: float = 7.0
 const BOB_FREQ: float = 6.0
 const BOB_AMP: float = 0.08
 const SPRINT_PANT_THRESHOLD: float = 3.0
+const WALK_NOISE_STRENGTH: float = 0.75
+const SPRINT_NOISE_STRENGTH: float = 1.55
+const WALK_NOISE_STEP_INTERVAL: float = 0.55
+const SPRINT_NOISE_STEP_INTERVAL: float = 0.36
 
 # Sprint panting settings
 const PANT_SPEED_REDUCTION: float = 0.8
@@ -33,13 +37,14 @@ var camera_start_position: Vector3
 var prev_bob_y: float = 0.0
 var step_triggered: bool = false
 var sprint_timer: float = 0.0
+var _noise_footstep_timer: float = 0.0
 
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera
-@onready var stair_ray: RayCast3D = $Leg/stair_ray
-@onready var stair_max: RayCast3D = $Leg/stair_max
-@onready var footstep_sound: AudioStreamPlayer3D = $FootstepSound
-@onready var breathing_sound: AudioStreamPlayer3D = $BreathingSound
+@onready var stair_ray: RayCast3D = get_node_or_null("Leg/stair_ray") as RayCast3D
+@onready var stair_max: RayCast3D = get_node_or_null("Leg/stair_max") as RayCast3D
+@onready var footstep_sound: AudioStreamPlayer3D = get_node_or_null("FootstepSound") as AudioStreamPlayer3D
+@onready var breathing_sound: AudioStreamPlayer3D = get_node_or_null("BreathingSound") as AudioStreamPlayer3D
 
 
 func _ready() -> void:
@@ -98,7 +103,8 @@ func _physics_process(delta: float) -> void:
 		if breathing_sound != null and breathing_sound.playing:
 			breathing_sound.stop()
 
-	var is_stair_step_edge: bool = input_dir.y > 0.1 and stair_ray.is_colliding() and not stair_max.is_colliding()
+	var has_stair_sensors: bool = stair_ray != null and stair_max != null
+	var is_stair_step_edge: bool = has_stair_sensors and input_dir.y > 0.1 and stair_ray.is_colliding() and not stair_max.is_colliding()
 	if is_stair_step_edge and not is_peeking:
 		# Keep a small upward assist active while the lower ray sees a riser that
 		# the upper ray clears. This lets the body climb consecutive steps instead
@@ -169,7 +175,7 @@ func _physics_process(delta: float) -> void:
 
 	if horizontal_speed > 0.1:
 		t_bob += delta * horizontal_speed
-		var on_stairs: bool = is_stair_step_edge or stair_ray.is_colliding() or stair_max.is_colliding()
+		var on_stairs: bool = is_stair_step_edge or (has_stair_sensors and (stair_ray.is_colliding() or stair_max.is_colliding()))
 		var camera_target: Vector3 = camera_start_position + _headbob(t_bob, on_stairs)
 		camera_target.x += current_peek_offset
 		var camera_follow_speed: float = 25.0 if on_stairs else 12.0
@@ -187,6 +193,7 @@ func _physics_process(delta: float) -> void:
 	camera.rotation.z = lerp_angle(camera.rotation.z, -current_peek_angle, peek_blend)
 
 	move_and_slide()
+	_update_footstep_noise(delta, is_sprinting)
 
 
 func _headbob(time: float, on_stairs: bool = false) -> Vector3:
@@ -207,8 +214,22 @@ func _handle_footsteps(is_sprinting: bool) -> void:
 
 
 func _play_footstep_sound(is_sprinting: bool) -> void:
-	if footstep_sound == null or footstep_sound.stream == null:
+	if footstep_sound != null and footstep_sound.stream != null:
+		var base_pitch: float = 1.15 if is_sprinting else 0.95
+		footstep_sound.pitch_scale = randf_range(base_pitch - 0.05, base_pitch + 0.05)
+		footstep_sound.play()
+
+
+func _update_footstep_noise(delta: float, is_sprinting: bool) -> void:
+	var horizontal_speed: float = Vector2(velocity.x, velocity.z).length()
+	if not is_on_floor() or horizontal_speed <= 0.1:
+		_noise_footstep_timer = 0.0
 		return
-	var base_pitch: float = 1.15 if is_sprinting else 0.95
-	footstep_sound.pitch_scale = randf_range(base_pitch - 0.05, base_pitch + 0.05)
-	footstep_sound.play()
+
+	_noise_footstep_timer -= delta
+	if _noise_footstep_timer > 0.0:
+		return
+
+	var noise_strength: float = SPRINT_NOISE_STRENGTH if is_sprinting else WALK_NOISE_STRENGTH
+	get_tree().call_group(&"enemy_listeners", &"hear_noise", global_position + Vector3.UP * 0.7, noise_strength, self)
+	_noise_footstep_timer = SPRINT_NOISE_STEP_INTERVAL if is_sprinting else WALK_NOISE_STEP_INTERVAL

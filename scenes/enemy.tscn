@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://chr8h8kwn4vio" path="res://enemy/enemy_chase_brain.gd" id="3_chase"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_enemy"]
-radius = 0.35
+radius = 0.28
 height = 1.8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_enemy"]
@@ -48,7 +48,7 @@ mesh = SubResource("SphereMesh_4ra3w")
 path_desired_distance = 0.5
 target_desired_distance = 0.6
 height = 1.8
-radius = 0.35
+radius = 0.28
 
 [node name="Perception" type="Area3D" parent="." unique_id=745432381]
 collision_layer = 0

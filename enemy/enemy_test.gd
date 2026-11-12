@@ -1,6 +1,11 @@
 extends Node3D
 
 const TEST_PLAYER_SPEED: float = 3.0
+const TEST_PLAYER_SPRINT_SPEED: float = 4.2
+const TEST_WALK_NOISE_STRENGTH: float = 0.75
+const TEST_SPRINT_NOISE_STRENGTH: float = 1.55
+const TEST_WALK_STEP_INTERVAL: float = 0.55
+const TEST_SPRINT_STEP_INTERVAL: float = 0.36
 
 @onready var enemy: CharacterBody3D = get_node_or_null("Enemy") as CharacterBody3D
 @onready var perception: Node = get_node_or_null("Enemy/Perception")
@@ -8,6 +13,7 @@ const TEST_PLAYER_SPEED: float = 3.0
 @onready var test_player: CharacterBody3D = get_node_or_null("TestPlayer") as CharacterBody3D
 
 var _player_start_transform: Transform3D
+var _footstep_timer: float = 0.0
 
 
 func _ready() -> void:
@@ -19,7 +25,7 @@ func _ready() -> void:
 	perception.connect(&"target_lost", Callable(self, "_on_target_lost"))
 
 	print("Enemy AI test ready. Enemy patrols until it sees the brown player.")
-	print("WASD: move the brown player | R: move player behind obstacle")
+	print("WASD: walk | hold Shift: sprint | R: move player behind obstacle")
 	print("V: place player in front of enemy | F: place player beside enemy | O: hide player behind obstacle")
 
 
@@ -29,11 +35,23 @@ func _physics_process(delta: float) -> void:
 
 	var input_direction: Vector2 = Input.get_vector("left", "right", "up", "down")
 	var move_direction := Vector3(input_direction.x, 0.0, input_direction.y)
-	test_player.velocity.x = move_direction.x * TEST_PLAYER_SPEED
-	test_player.velocity.z = move_direction.z * TEST_PLAYER_SPEED
+	var is_moving: bool = move_direction.length_squared() > 0.0
+	var is_sprinting: bool = is_moving and Input.is_action_pressed("sprint")
+	var movement_speed: float = TEST_PLAYER_SPRINT_SPEED if is_sprinting else TEST_PLAYER_SPEED
+	test_player.velocity.x = move_direction.x * movement_speed
+	test_player.velocity.z = move_direction.z * movement_speed
 	if not test_player.is_on_floor():
 		test_player.velocity += test_player.get_gravity() * delta
 	test_player.move_and_slide()
+
+	if is_moving and test_player.is_on_floor():
+		_footstep_timer -= delta
+		if _footstep_timer <= 0.0:
+			var noise_strength: float = TEST_SPRINT_NOISE_STRENGTH if is_sprinting else TEST_WALK_NOISE_STRENGTH
+			test_player.get_tree().call_group(&"enemy_listeners", &"hear_noise", test_player.global_position + Vector3.UP * 0.7, noise_strength, test_player)
+			_footstep_timer = TEST_SPRINT_STEP_INTERVAL if is_sprinting else TEST_WALK_STEP_INTERVAL
+	else:
+		_footstep_timer = 0.0
 
 
 func _input(event: InputEvent) -> void:
@@ -60,8 +78,8 @@ func _validate_scene_setup() -> bool:
 		push_error("Enemy test scene is missing its Enemy, Perception, ChaseBrain, or TestPlayer node.")
 		return false
 
-	if not perception.has_signal(&"target_detected") or not perception.has_signal(&"target_lost"):
-		push_error("Enemy Perception must expose target_detected and target_lost signals.")
+	if not perception.has_signal(&"target_detected") or not perception.has_signal(&"target_lost") or not perception.has_signal(&"sound_heard"):
+		push_error("Enemy Perception must expose target_detected, target_lost, and sound_heard signals.")
 		return false
 
 	if not test_player.is_in_group(&"player"):

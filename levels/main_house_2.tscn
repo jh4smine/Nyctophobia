@@ -976,6 +976,7 @@ shape = SubResource("ConcavePolygonShape3D_3glmq")
 
 [node name="Ceiling3" type="MeshInstance3D" parent="NavigationRegion3D/LivingRoom" unique_id=416208111]
 transform = Transform3D(-4.0330222e-05, -4.419219, -2.7939677e-09, -0.05291583, 0.0033682447, -1.1641532e-10, 0, 8.381903e-09, 4.1869082, 5.0285187, 2.4597507, 27.113895)
+visible = false
 material_override = SubResource("StandardMaterial3D_hhhwx")
 mesh = SubResource("ArrayMesh_4ckdt")
 skeleton = NodePath("../../Room2")
@@ -987,6 +988,7 @@ shape = SubResource("ConcavePolygonShape3D_r23t7")
 
 [node name="Ceiling4" type="MeshInstance3D" parent="NavigationRegion3D/LivingRoom" unique_id=582738707]
 transform = Transform3D(-4.0322942e-05, -2.846588, -2.7939677e-09, -0.052906245, 0.0021696163, 0, 9.094947e-13, 6.519258e-09, 1.7287576, 3.4727988, 2.4605637, 32.84076)
+visible = false
 material_override = SubResource("StandardMaterial3D_hhhwx")
 mesh = SubResource("ArrayMesh_4ckdt")
 skeleton = NodePath("../../Room2")
@@ -998,6 +1000,7 @@ shape = SubResource("ConcavePolygonShape3D_r23t7")
 
 [node name="Ceiling5" type="MeshInstance3D" parent="NavigationRegion3D/LivingRoom" unique_id=581748459]
 transform = Transform3D(-4.0313433e-05, -1.8292271, -2.3283064e-09, -0.05289373, 0.0013942033, -1.0186341e-10, 1.8189894e-12, 4.1909516e-09, 1.7300771, 7.8752193, 2.4503522, 32.851456)
+visible = false
 material_override = SubResource("StandardMaterial3D_r23t7")
 mesh = SubResource("ArrayMesh_4ckdt")
 skeleton = NodePath("../../Room2")
@@ -1235,6 +1238,7 @@ shape = SubResource("ConcavePolygonShape3D_pr4rp")
 
 [node name="Ceiling2" type="MeshInstance3D" parent="NavigationRegion3D/Room2" unique_id=1396326374]
 transform = Transform3D(-4.032915e-05, -4.4212627, 0, -0.052914444, 0.003369802, 0, 0, 0, 5.817223, -12.449834, 3.7659116, -1.9114404)
+visible = false
 material_override = SubResource("StandardMaterial3D_t24bo")
 mesh = SubResource("ArrayMesh_4ckdt")
 
@@ -1701,19 +1705,49 @@ transform = Transform3D(0.022687351, 0.001744879, -0.999741, 0, 0.9999984, 0.001
 [node name="PatrolPoints" type="Node3D" parent="." unique_id=1341852337]
 
 [node name="PatrolPoint1" type="Marker3D" parent="PatrolPoints" unique_id=806079632]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 0.476, -5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0, -3.024, -6.0)
 
 [node name="PatrolPoint2" type="Marker3D" parent="PatrolPoints" unique_id=988856876]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.476, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.5, -3.024, -6.0)
 
 [node name="PatrolPoint3" type="Marker3D" parent="PatrolPoints" unique_id=335527183]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.476, -4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.5, -3.024, -1.2)
 
 [node name="PatrolPoint4" type="Marker3D" parent="PatrolPoints" unique_id=363795084]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.476, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0, -3.024, -1.2)
+
+[node name="LowerToMainFloorStairLink" type="NavigationLink3D" parent="."]
+start_position = Vector3(6.5, -0.524, 0.5)
+end_position = Vector3(6.5, 0.475, 2.0)
+bidirectional = true
+
+[node name="MainToUpperFloorStairLink" type="NavigationLink3D" parent="."]
+start_position = Vector3(6.5, 0.475, 2.0)
+end_position = Vector3(6.75, 2.725, 3.7)
+bidirectional = true
+
+[node name="MainToBasementStairLink" type="NavigationLink3D" parent="."]
+start_position = Vector3(9.0, -0.524, -0.45)
+end_position = Vector3(16.0, -3.024, -0.45)
+bidirectional = true
+
+[node name="Door3NavigationLink" type="NavigationLink3D" parent="."]
+start_position = Vector3(22.3, -3.024, -9.3)
+end_position = Vector3(22.3, -3.024, -8.0)
+bidirectional = true
+
+[node name="Door4NavigationLink" type="NavigationLink3D" parent="."]
+start_position = Vector3(13.2, -3.024, -18.0)
+end_position = Vector3(14.5, -3.024, -18.0)
+bidirectional = true
+
+[node name="Door5NavigationLink" type="NavigationLink3D" parent="."]
+start_position = Vector3(5.75, -3.024, -18.9)
+end_position = Vector3(5.75, -3.024, -20.4)
+bidirectional = true
 
 [node name="Enemy" parent="." unique_id=1915245730 instance=ExtResource("11_enemy")]
-transform = Transform3D(-0.434, 0, 0.901, 0, 1, 0, -0.901, 0, -0.434, 6.74, 0.476, -1.87)
+transform = Transform3D(-0.434, 0, 0.901, 0, 1, 0, -0.901, 0, -0.434, 18.0, -3.024, -4.0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1684853239]
 environment = SubResource("Environment_dtglo")

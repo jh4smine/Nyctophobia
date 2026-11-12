@@ -8,11 +8,14 @@ enum SearchPhase { TURN_LEFT, PAUSE_LEFT, TURN_RIGHT, PAUSE_RIGHT }
 @export var patrol_enabled: bool = true
 @export var chase_enabled: bool = true
 @export_range(0.1, 2.0, 0.1) var chase_repath_distance: float = 0.6
+@export_range(0.0, 1.0, 0.05) var chase_sight_loss_grace: float = 0.35
 @export_range(0.0, 10.0, 0.1) var patrol_wait_time: float = 1.5
 @export_range(0.5, 10.0, 0.1) var search_duration: float = 3.0
 @export_range(10.0, 180.0, 1.0) var search_scan_angle_degrees: float = 50.0
 @export_range(20.0, 360.0, 1.0) var search_turn_speed_degrees: float = 90.0
 @export_range(0.1, 3.0, 0.05) var search_pause_duration: float = 0.4
+@export_range(0.0, 3.0, 0.1) var hearing_retarget_cooldown: float = 0.8
+@export_range(0.2, 5.0, 0.1) var hearing_retarget_distance: float = 1.2
 
 const PATROL_POINTS_PATH: NodePath = ^"../../PatrolPoints"
 
@@ -35,6 +38,8 @@ var _search_phase: SearchPhase = SearchPhase.TURN_LEFT
 var _search_pause_elapsed: float = 0.0
 var _search_scan_progress: float = 0.0
 var _navigation_ready: bool = false
+var _hearing_cooldown_remaining: float = 0.0
+var _sight_loss_grace_remaining: float = 0.0
 
 
 func _ready() -> void:
@@ -50,6 +55,7 @@ func _ready() -> void:
 
 	_perception.connect(&"target_detected", Callable(self, "_on_target_detected"))
 	_perception.connect(&"target_lost", Callable(self, "_on_target_lost"))
+	_perception.connect(&"sound_heard", Callable(self, "_on_sound_heard"))
 	_collect_patrol_points()
 	_wait_until_navigation_is_ready()
 
@@ -57,12 +63,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not _navigation_ready:
 		return
+	_hearing_cooldown_remaining = maxf(0.0, _hearing_cooldown_remaining - delta)
 
 	match _state:
 		BehaviorState.PATROL:
 			_tick_patrol(delta)
 		BehaviorState.CHASE:
-			_tick_chase()
+			_tick_chase(delta)
 		BehaviorState.INVESTIGATE:
 			_tick_investigate()
 		BehaviorState.SEARCH:
@@ -96,16 +103,24 @@ func _tick_patrol(delta: float) -> void:
 		_patrol_destination_active = false
 
 
-func _tick_chase() -> void:
+func _tick_chase(delta: float) -> void:
 	if not is_instance_valid(_current_target):
 		_current_target = null
 		_begin_investigation()
 		return
 
-	# Only use the live position while Perception confirms current line of sight.
+	# Door frames can interrupt vision briefly as the enemy crosses a threshold.
+	# Continue toward the last confirmed position during this grace period so a
+	# one-frame visibility change does not reverse the navigation target.
 	if not bool(_perception.call(&"is_target_visible", _current_target)):
+		_sight_loss_grace_remaining = maxf(0.0, _sight_loss_grace_remaining - delta)
+		if _sight_loss_grace_remaining == 0.0:
+			_current_target = null
+			print("Enemy lost sight of Player.")
+			_begin_investigation()
 		return
 
+	_sight_loss_grace_remaining = chase_sight_loss_grace
 	var target_position: Vector3 = _to_navigation_point(_perception.call(&"get_target_aim_point", _current_target))
 	_last_known_position = target_position
 	_has_last_known_position = true
@@ -194,7 +209,10 @@ func _wait_until_navigation_is_ready() -> void:
 ## Snaps a world position onto the navigation mesh so chase/investigate targets
 ## are reachable even when the target's origin is not at floor level.
 func _to_navigation_point(world_position: Vector3) -> Vector3:
-	var navigation_map: RID = _enemy.get_world_3d().navigation_map
+	var navigation_agent := _enemy.get_node_or_null("NavigationAgent3D") as NavigationAgent3D
+	if navigation_agent == null:
+		return world_position
+	var navigation_map: RID = navigation_agent.get_navigation_map()
 	if not navigation_map.is_valid() or NavigationServer3D.map_get_iteration_id(navigation_map) == 0:
 		return world_position
 	return NavigationServer3D.map_get_closest_point(navigation_map, world_position)
@@ -208,10 +226,42 @@ func _set_patrol_destination() -> void:
 	if not patrol_enabled or _patrol_points.is_empty() or _state != BehaviorState.PATROL:
 		return
 
-	var point: Node3D = _patrol_points[_patrol_index]
-	_enemy.call(&"move_to", point.global_position)
-	_patrol_destination_active = true
-	print("Enemy patrolling to %s." % point.name)
+	var navigation_agent := _enemy.get_node_or_null("NavigationAgent3D") as NavigationAgent3D
+	if navigation_agent == null:
+		return
+	var navigation_map: RID = navigation_agent.get_navigation_map()
+
+	# Try each marker at most once. Markers placed below a floor or on a
+	# disconnected navigation island must not hijack the patrol route.
+	for _attempt: int in range(_patrol_points.size()):
+		var point: Node3D = _patrol_points[_patrol_index]
+		_patrol_index = (_patrol_index + 1) % _patrol_points.size()
+		var patrol_destination: Vector3 = _to_navigation_point(point.global_position)
+		var snap_distance: float = point.global_position.distance_to(patrol_destination)
+		if snap_distance > 1.5:
+			push_warning("Patrol point %s is %.1f m from the navigation mesh; checking whether its nearest walkable point is reachable." % [point.name, snap_distance])
+
+		var path: PackedVector3Array = NavigationServer3D.map_get_path(
+			navigation_map,
+			_enemy.global_position,
+			patrol_destination,
+			true,
+			navigation_agent.navigation_layers
+		)
+		if path.is_empty() or (path.size() == 1 and _horizontal_distance(_enemy.global_position, patrol_destination) > 1.0):
+			push_warning("Skipping patrol point %s: there is no navigation route from the enemy's current floor." % point.name)
+			continue
+
+		_patrol_index = (_patrol_index + _patrol_points.size() - 1) % _patrol_points.size()
+		_enemy.call(&"move_to", patrol_destination)
+		_patrol_destination_active = true
+		print("Enemy patrolling to %s at %s." % [point.name, patrol_destination])
+		return
+
+	_enemy.call(&"stop_moving")
+	_patrol_destination_active = false
+	_patrol_wait_timer = maxf(patrol_wait_time, 1.0)
+	push_warning("Enemy found no reachable patrol points. Check the patrol markers and NavigationRegion3D links.")
 
 
 func _begin_investigation() -> void:
@@ -243,9 +293,13 @@ func _on_target_detected(target: Node3D) -> void:
 		return
 	if is_instance_valid(_current_target) and _current_target != target:
 		return
+	if _state == BehaviorState.CHASE and _current_target == target:
+		_sight_loss_grace_remaining = chase_sight_loss_grace
+		return
 
 	_current_target = target
 	_state = BehaviorState.CHASE
+	_sight_loss_grace_remaining = chase_sight_loss_grace
 	_enemy.call(&"stop_moving")
 	_investigation_active = false
 	_has_chase_destination = false
@@ -260,9 +314,42 @@ func _on_target_lost(target: Node3D) -> void:
 	if _current_target != target:
 		return
 
-	# Perception freezes this cached position at the last frame with clear vision.
+	# Cache only the last position perception confirmed before sight was lost.
 	_last_known_position = _to_navigation_point(_perception.call(&"get_last_visible_position", target))
 	_has_last_known_position = true
-	_current_target = null
-	print("Enemy lost sight of %s." % target.name)
+	_sight_loss_grace_remaining = chase_sight_loss_grace
+	# Keep the existing chase moving toward the last position vision confirmed;
+	# never replace it with the player's hidden, live position.
+	_enemy.call(&"move_to", _last_known_position)
+
+
+func _on_sound_heard(approximate_position: Vector3, _intensity: float) -> void:
+	if not _navigation_ready:
+		return
+	# Sight wins over sound. The brain only receives an approximate point from
+	# Perception and never queries a hidden player's live position.
+	if _state == BehaviorState.CHASE and is_instance_valid(_current_target):
+		if bool(_perception.call(&"is_target_visible", _current_target)):
+			return
+		# Do not let a footstep retarget the enemy while a brief doorway occlusion
+		# is still inside the chase sight-loss grace period.
+		if _sight_loss_grace_remaining > 0.0:
+			return
+
+	var heard_point: Vector3 = _to_navigation_point(approximate_position)
+	if _state == BehaviorState.INVESTIGATE:
+		if _hearing_cooldown_remaining > 0.0 or _horizontal_distance(heard_point, _last_known_position) < hearing_retarget_distance:
+			return
+		_last_known_position = heard_point
+		_has_last_known_position = true
+		_hearing_cooldown_remaining = hearing_retarget_cooldown
+		_enemy.call(&"move_to", _last_known_position)
+		return
+
+	if _state == BehaviorState.CHASE:
+		_current_target = null
+	_last_known_position = heard_point
+	_has_last_known_position = true
+	_hearing_cooldown_remaining = hearing_retarget_cooldown
 	_begin_investigation()
+	print("Enemy heard a footstep and is investigating its approximate source.")
