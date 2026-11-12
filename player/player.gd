@@ -60,6 +60,7 @@ func _physics_process(delta: float) -> void:
 
 	var input_dir: Vector2 = Input.get_vector("left", "right", "down", "up")
 	var is_moving: bool = input_dir.length_squared() > 0.0
+	var is_peeking: bool = Input.is_action_pressed("peek_left") or Input.is_action_pressed("peek_right")
 	var is_sprinting: bool = Input.is_action_pressed("sprint") and is_moving and is_on_floor()
 	speed = SPRINT_SPEED if is_sprinting else WALK_SPEED
 
@@ -73,7 +74,7 @@ func _physics_process(delta: float) -> void:
 			breathing_sound.stop()
 
 	var is_stair_step_edge: bool = input_dir.y > 0.1 and stair_ray.is_colliding() and not stair_max.is_colliding()
-	if is_stair_step_edge:
+	if is_stair_step_edge and not is_peeking:
 		# Keep a small upward assist active while the lower ray sees a riser that
 		# the upper ray clears. This lets the body climb consecutive steps instead
 		# of getting only one lift at the first riser.
@@ -83,18 +84,25 @@ func _physics_process(delta: float) -> void:
 	direction += global_transform.basis.x * input_dir.x
 	direction.y = 0.0
 	direction = direction.normalized()
-	if direction != Vector3.ZERO:
-		velocity.x = direction.x * speed
-		velocity.z = direction.z * speed
+
+	# Stop player movement while peeking
+	if is_peeking:
+		velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED * delta * 10.0)
+		velocity.z = move_toward(velocity.z, 0.0, WALK_SPEED * delta * 10.0)
 	else:
-		velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED * delta * 5.0)
-		velocity.z = move_toward(velocity.z, 0.0, WALK_SPEED * delta * 5.0)
+		if direction != Vector3.ZERO:
+			velocity.x = direction.x * speed
+			velocity.z = direction.z * speed
+		else:
+			velocity.x = move_toward(velocity.x, 0.0, WALK_SPEED * delta * 5.0)
+			velocity.z = move_toward(velocity.z, 0.0, WALK_SPEED * delta * 5.0)
 
 	var look_x: float = Input.get_axis("look_left", "look_right")
 	var look_y: float = Input.get_axis("look_up", "look_down")
-	rotate_y(-look_x * CONTROLLER_SENSITIVITY * delta)
-	mouse_pitch = clampf(mouse_pitch - look_y * CONTROLLER_SENSITIVITY * delta, deg_to_rad(-85.0), deg_to_rad(85.0))
-	head.rotation.x = mouse_pitch
+	if not is_peeking:
+		rotate_y(-look_x * CONTROLLER_SENSITIVITY * delta)
+		mouse_pitch = clampf(mouse_pitch - look_y * CONTROLLER_SENSITIVITY * delta, deg_to_rad(-85.0), deg_to_rad(85.0))
+		head.rotation.x = mouse_pitch
 	
 	is_looking_behind = Input.is_action_pressed("look_behind")
 	target_look_angle = -PI if is_looking_behind else 0.0
@@ -106,7 +114,7 @@ func _physics_process(delta: float) -> void:
 	# Q = Peek left
 	# E = Peek right
 	# Peek only works when standing still and not looking behind
-	# Mouse movement is locked while peeking
+	# Player movement and mouse movement are locked while peeking
 
 	var peek_input: float = 0.0
 
