@@ -18,7 +18,6 @@ script = ExtResource("1_oul6g")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1602730135]
 transform = Transform3D(0.8, -1.4585661e-12, 4.930381e-32, 1.4585661e-12, 0.8, 0, -4.930381e-32, 9e-44, 0.8, -0.04837531, -0.81449395, -0.04937458)
-visible = false
 mesh = SubResource("CapsuleMesh_toyot")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=696409646]
@@ -29,7 +28,7 @@ shape = SubResource("ConvexPolygonShape3D_b5rfl")
 transform = Transform3D(1, 8.9245604e-11, -4.4703484e-08, -6.544144e-11, 0.99999994, -1.1393824e-10, 5.5879354e-08, -4.6659465e-10, 1, -2.896785e-05, -0.5007495, -0.0008528232)
 
 [node name="Camera" type="Camera3D" parent="Head" unique_id=1540662895]
-transform = Transform3D(1.2499999, -1.3889455e-10, -1.6298141e-07, 1.0913936e-10, 1.25, -1.474485e-10, 1.4901158e-07, 8.731145e-10, 1.2499999, -0.08649637, 0, -0.24858491)
+transform = Transform3D(1.2499999, -1.3889455e-10, -1.6298141e-07, 1.0913936e-10, 1.25, -1.474485e-10, 1.4901158e-07, 8.731145e-10, 1.2499999, -0.036398202, 0, -0.37080878)
 keep_aspect = 0
 current = true
 fov = 130.8

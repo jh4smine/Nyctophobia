@@ -12,8 +12,12 @@ const BOB_FREQ: float = 6.0
 const BOB_AMP: float = 0.08
 const SPRINT_PANT_THRESHOLD: float = 3.0
 
+# Sprint panting settings
+const PANT_SPEED_REDUCTION: float = 0.8
+const STAMINA_RECOVERY_TIME: float = 3.0
+
 # Peek settings
-const PEEK_ANGLE: float = 18.0
+const PEEK_ANGLE: float = 20.0
 const PEEK_OFFSET: float = 0.45
 const PEEK_SMOOTHING: float = 16.0
 
@@ -62,14 +66,35 @@ func _physics_process(delta: float) -> void:
 	var is_moving: bool = input_dir.length_squared() > 0.0
 	var is_peeking: bool = Input.is_action_pressed("peek_left") or Input.is_action_pressed("peek_right")
 	var is_sprinting: bool = Input.is_action_pressed("sprint") and is_moving and is_on_floor()
-	speed = SPRINT_SPEED if is_sprinting else WALK_SPEED
 
+	# Sprint panting and stamina recovery
 	if is_sprinting:
 		sprint_timer += delta
-		if sprint_timer >= SPRINT_PANT_THRESHOLD and breathing_sound != null and not breathing_sound.playing:
-			breathing_sound.play()
+
+		if sprint_timer >= SPRINT_PANT_THRESHOLD:
+			# Start panting after 3 seconds
+			if breathing_sound != null and not breathing_sound.playing:
+				breathing_sound.play()
+
+			# Slightly reduce sprint speed
+			speed = SPRINT_SPEED - PANT_SPEED_REDUCTION
+		else:
+			speed = SPRINT_SPEED
+
 	else:
-		sprint_timer = 0.0
+		# Recover stamina while walking OR standing still
+		sprint_timer = move_toward(
+			sprint_timer,
+			0.0,
+			(SPRINT_PANT_THRESHOLD / STAMINA_RECOVERY_TIME) * delta
+		)
+
+		speed = WALK_SPEED
+
+		# Stop panting when not sprinting
+		if breathing_sound != null and breathing_sound.playing:
+			breathing_sound.stop()
+
 		if breathing_sound != null and breathing_sound.playing:
 			breathing_sound.stop()
 
@@ -103,7 +128,7 @@ func _physics_process(delta: float) -> void:
 		rotate_y(-look_x * CONTROLLER_SENSITIVITY * delta)
 		mouse_pitch = clampf(mouse_pitch - look_y * CONTROLLER_SENSITIVITY * delta, deg_to_rad(-85.0), deg_to_rad(85.0))
 		head.rotation.x = mouse_pitch
-	
+
 	is_looking_behind = Input.is_action_pressed("look_behind")
 	target_look_angle = -PI if is_looking_behind else 0.0
 	var look_blend: float = 1.0 - exp(-LOOK_BEHIND_SMOOTHING * delta)
@@ -141,8 +166,6 @@ func _physics_process(delta: float) -> void:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 	var horizontal_speed: float = Vector2(velocity.x, velocity.z).length()
-
-
 
 	if horizontal_speed > 0.1:
 		t_bob += delta * horizontal_speed
