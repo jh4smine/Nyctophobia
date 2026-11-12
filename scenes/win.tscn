@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dof82e2ymtlje"]
 
 [ext_resource type="FontFile" uid="uid://q6fax8u8iu6e" path="res://assets/ShadowsIntoLight.ttf" id="1_826fv"]
+[ext_resource type="Texture2D" uid="uid://2lidvfv86hte" path="res://assets/Gemini_Generated_Image_jqo1o9jqo1o9jqo1.jpg" id="1_iiocm"]
 [ext_resource type="FontFile" uid="uid://dp683skmw8m6i" path="res://assets/SpecialElite.ttf" id="2_iiocm"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_k5jky"]
@@ -17,6 +18,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=521169287]
+position = Vector2(576.125, 323.75)
+scale = Vector2(0.8437728, 0.8444011)
+texture = ExtResource("1_iiocm")
+
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=816761797]
 layout_mode = 1
 anchors_preset = 8
@@ -24,10 +30,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -576.0
-offset_top = -315.0
-offset_right = 578.0
-offset_bottom = 322.0
+offset_left = -580.0
+offset_top = -327.0
+offset_right = 574.0
+offset_bottom = 323.0
 grow_horizontal = 2
 grow_vertical = 2
 

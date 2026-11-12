@@ -15,10 +15,6 @@ run/main_scene="uid://nkdvg1o42d81"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
-[autoload]
-
-TransitionScene="*uid://4v57aopph08a"
-
 [display]
 
 window/stretch/mode="canvas_items"

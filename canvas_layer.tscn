@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://bt108gdkn6nk3"]
+
+[ext_resource type="Script" uid="uid://cj84qlcmq4y5m" path="res://BatteryMeter.gd" id="1_v2lfg"]
+
+[sub_resource type="Gradient" id="Gradient_kg61h"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_m37fh"]
+gradient = SubResource("Gradient_kg61h")
+width = 108
+height = 28
+
+[sub_resource type="Gradient" id="Gradient_tg4cr"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1y3eh"]
+gradient = SubResource("Gradient_tg4cr")
+height = 26
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=955446368]
+script = ExtResource("1_v2lfg")
+
+[node name="BatteryMeter" type="TextureProgressBar" parent="." unique_id=1418508206]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_right = 25.0
+offset_bottom = 40.0
+grow_horizontal = 0
+value = 100.0
+texture_under = SubResource("GradientTexture2D_m37fh")
+texture_progress = SubResource("GradientTexture2D_1y3eh")
+tint_progress = Color(0.21960784, 0.8509804, 0.42352942, 1)
+
+[node name="ColorRect" type="ColorRect" parent="BatteryMeter" unique_id=173348376]
+layout_mode = 0
+offset_left = 108.0
+offset_top = 7.0
+offset_right = 112.0
+offset_bottom = 19.0
+offset_transform_position = Vector2(64, 8)
+color = Color(0.13333334, 0.13333334, 0.13333334, 1)

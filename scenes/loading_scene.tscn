@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://phv2u45awr8r"]
 
 [ext_resource type="Script" uid="uid://bmqhcr21ct4x3" path="res://script/loading_scene.gd" id="1_a0egu"]
-[ext_resource type="Texture2D" uid="uid://2lidvfv86hte" path="res://assets/Gemini_Generated_Image_jqo1o9jqo1o9jqo1.jpg" id="2_7vner"]
+[ext_resource type="Texture2D" uid="uid://dnmmy1fk8boel" path="res://assets/c12875e6-48e9-4fe5-918f-ff9689046c56.png" id="2_7vner"]
 [ext_resource type="FontFile" uid="uid://dp683skmw8m6i" path="res://assets/SpecialElite.ttf" id="2_o5idu"]
 [ext_resource type="FontFile" uid="uid://q6fax8u8iu6e" path="res://assets/ShadowsIntoLight.ttf" id="3_7vner"]
 
@@ -9,8 +9,8 @@
 script = ExtResource("1_a0egu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1952703925]
-position = Vector2(573.25, 322)
-scale = Vector2(0.8450549, 0.84375)
+position = Vector2(575, 324.5)
+scale = Vector2(0.69138753, 0.70244414)
 texture = ExtResource("2_7vner")
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=465627600]
